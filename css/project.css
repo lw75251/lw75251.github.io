@@ -1,0 +1,22 @@
+/* font-family: 'Source Sans Pro', sans-serif;
+font-family: 'Lato', sans-serif; */
+
+.intro {text-align: left;}
+
+/* Header*/
+.navbar-brand{animation-duration: 1s;font-size: 1.35rem;}
+.navbar{font-family: 'Source Sans Pro', sans-serif;}
+.icon{font-size: 0.95rem;color:white;}
+#home_header {animation-duration: 1s;animation-delay: 0.2s;}
+#project_header {animation-duration: 1s;animation-delay: 0.4s;}
+#interests_header {animation-duration: 1s;animation-delay: 0.5s;}
+#contact_header {animation-duration: 1s;animation-delay: 0.6s;}
+
+/* Cards */
+.card{
+	margin: 1.5rem;
+}
+
+.card-body h6,p{
+	text-align: left;
+}
