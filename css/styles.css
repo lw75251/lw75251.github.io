@@ -369,6 +369,24 @@ p {
 	background-color: #492c77;
 }
 
+.sony-card {
+	background: #757882;
+}
+
+.sony-card .cta,
+.sony-card .label {
+	background-color: #757882;
+}
+
+.sony-card .title img {
+	height: 100px;
+	width: 200px;
+}
+
+.sony-card .desc {
+	color: white;
+}
+
 .sap-card {
 	background: linear-gradient(#0DB9F2, #019CE0, #0C7ECF, #1661BE);
 }
@@ -509,4 +527,171 @@ p {
 .icon-button:hover .fa-instagram,
 .icon-button:hover .fa-linkedin {
 	color: white;
+}
+
+/* Gravitate CSS */
+.gravitate-theme .logo {
+	color: #5b4977;
+}
+
+.gravitate-bg {
+  display: block;
+  background-color: #5b4977;
+}
+
+.portfolio .header .content {
+  display: table;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 50px;
+}
+
+.portfolio .header .content > div {
+  display: table-cell;
+  vertical-align: middle;
+  width: 40%;
+}
+
+.portfolio .header .content > div:last-child {
+  width: 60%;
+}
+
+.portfolio .header .title {
+  margin-bottom: 30px;
+}
+
+.portfolio .header .desc {
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.gravitate-portfolio .header .desc {
+  color: #aaa;
+}
+
+body.gravitate-portfolio {
+  padding: 0;
+}
+
+.portfolio .header {
+  position: relative;
+  padding: 0;
+}
+
+.gravitate-portfolio .bottom-bg {
+  position: absolute;
+  background: url(../images/workitout/header_bg.svg) bottom center no-repeat;
+  background-size: contain;
+  left: 0;
+  bottom: -50px;
+  width: 101%;
+  height: 100%;
+}
+
+.gravitate-portfolio .concept {
+  margin-top: 45px;
+  padding-bottom: 1px;
+  color: white;
+  line-height: 30px;
+  font-size: 18px;
+}
+
+.gravitate-bg {
+  display: block;
+  background-color: #5b4977;
+}
+
+section > div {
+  padding: 0 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.portfolio .section-title {
+  font-family: 'Muli Bold';
+  font-size: 28px;
+  padding-top: 100px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 100;
+  margin-bottom: 30px;
+}
+
+.gravitate-portfolio .concept .section-title {
+  color: white;
+}
+
+.gravitate-portfolio .concept h4 {
+  font-family: 'Muli Bold';
+  color: white;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 100;
+  opacity: 0.7;
+  margin-bottom: 0;
+}
+
+.gravitate-portfolio .concept .row > div:first-child {
+  padding-right: 50px;
+}
+
+.gravitate-portfolio .concept .row > div:last-child {
+  padding-left: 50px;
+}
+
+.gravitate-portfolio .concept hr {
+  opacity: 0.5;
+}
+
+.gravitate-portfolio .concept .row {
+  margin-bottom: 50px;
+}
+
+.gravitate-portfolio .concept p {
+  margin-top: 15px;
+  opacity: 0.7;
+}
+
+.gravitate-portfolio .discover {
+  color: white;
+  padding-bottom: 50px;
+  position: relative;
+  z-index: 2;
+}
+
+.full-image {
+  display: block;
+  width: 100%;
+}
+
+.full-image img {
+  width: 100%;
+}
+
+.full-image.double {
+  display: table;
+  width: 100%
+}
+
+.full-image.double img {
+  float: left;
+  width: 50%;
+}
+
+.section-table {
+  display: table;
+  width: 100%;
+}
+
+.section-table > div {
+  display: table-cell;
+  vertical-align: middle;
+  width: 50%;
+  padding-right: 25px;
+}
+
+.section-table > div:last-child {
+  padding-left: 25px;
 }
