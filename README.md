@@ -1,6 +1,7 @@
 # personal website
 
 ## Technologies Used
+
 - HMTL, CSS, JS
 - Twitter Bootstrap
 - Font Awesome
@@ -11,6 +12,7 @@
 - Devicon
 
 ## Guides / Inspirations
+
 Approach: After learning the basics of HTML, CSS, and Javascript, I sought out to look at other personal websites
 and attempt to practice recreating them without looking at source codes. I then created my website by tweaking and
 applying the code snippets from practice.
@@ -20,3 +22,7 @@ applying the code snippets from practice.
 - [Matthew Williams](http://findmatthew.com/)
 - [Jessdesigntan](http://jessdesigntan.com/)
 - [Gary Sheng](http://www.garysheng.com/)
+
+## React Portfolio
+
+Credits go to [Ashutosh Hathidara](https://github.com/ashutosh1919/masterPortfolio)
