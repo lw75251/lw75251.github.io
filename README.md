@@ -26,3 +26,6 @@ applying the code snippets from practice.
 ## React Portfolio
 
 Credits go to [Ashutosh Hathidara](https://github.com/ashutosh1919/masterPortfolio)
+
+Approach: Update the JSON infos. Looked at how the website was created and customized the code to depend on my needs.
+Removed Blogs Section and Address Section. Plan to add more relevant projects and updating those READMEs.
