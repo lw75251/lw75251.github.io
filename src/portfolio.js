@@ -25,7 +25,7 @@ const greeting = {
   subTitle:
     "A full stack data scientist who loves digging in deep into the data to find out about the why. Passionate about making data-driven decisions, building models, and improving products.",
   resumeLink:
-    "https://drive.google.com/open?id=1XYpYhLeqCdyx_q6l0bQoC7RgwQjAjXPf",
+    "https://drive.google.com/file/d/1_NNlkGXv5cATVGZElwrkKIyJFpM5fmUs/view?usp=sharing",
   portfolio_repository: "https://github.com/lw75251",
 };
 
@@ -508,7 +508,7 @@ const experience = {
           duration: "Jun 2015 - Aug 2015",
           location: "New York City, NY",
           description:
-            "As a This is financial Solution Company. I have made Supervised Learning model for the company which can perform time series analysis on Stock price data for 32 companies. I have built LSTM Neural Networks Model and trained the data of 32 companies for last 2 years. This model is also used for forecasting.",
+            "Mastered the basics of Excel and Tableau by managing sheets and visualizing dashboards to highlight campaign performance. For the summer internship project, worked on a data analysis of NPS survey to uncover key drivers for a successful customer experience. The analysis was a major component of a client acquisition strategy where the interns sucessfully pitched and acquired two new clients.",
           color: "#0071C5",
         },
       ],
