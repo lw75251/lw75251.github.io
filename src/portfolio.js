@@ -463,14 +463,33 @@ const experience = {
       title: "Work",
       experiences: [
         {
+          title: "Business Intelligence Analyst II",
+          company: "Indeed",
+          company_url: "https://www.publicisgroupe.com/en",
+          logo_path: "indeed_logo.png",
+          duration: "Oct 2021 - PRESENT",
+          location: "New York City, NY",
+          description: `Indeed helps people get jobs`,
+          color: "#0879bf",
+        },
+        {
           title: "Data Scientist",
           company: "Rauxa (under PublicisGroupe)",
           company_url: "https://www.publicisgroupe.com/en",
           logo_path: "rauxa_logo.png",
-          duration: "Feb 2020 - PRESENT",
+          duration: "Feb 2020 - Oct 2021",
           location: "New York City, NY",
-          description:
-            "I help clients optimize their creatives through A/B Testing, build machine learning models, and make data-driven decisions to achieve their business goals. Promoted from Business Intelligence Analyst within one year.",
+          description: `Rauxa is a full-service marketing agency that is rooted in data, enabled by technology, inspired to create and orchestrated to perform for Verizon, Alaska Airlines, Chase, TGI Fridays, and more than 20 other leading brands. A part of Publicis Groupe - one the largest marketing and communications companies in the world.
+            
+            Awards
+            Sept 2021 Monthly Spotlight - Recognized as one of two employees across all departments, company-wide, for outstanding performance
+            Promoted within 1 year from Data Intelligence, Analyst
+            
+            Responsible for:
+            - Hypothesis and A/B Testing of media creatives to improve Client KPIs
+            - Build new-business prototypes and client-facing Web Apps spanning custom reporting, competitive intelligence, data analysis, and visualization purposes
+            - Monitor dashboards, investigate movements of Client KPIs and give actionable recommendations
+            - Enrich client strategy by tying in third-party data sources (vendor or extract the data myself) and performing ad-hoc analyses`,
           color: "#0879bf",
         },
         {
