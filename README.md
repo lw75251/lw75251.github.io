@@ -1,31 +1,74 @@
-# personal website
+<div align="center">
+  <img alt="Logo" src="https://github.com/yashitanamdeo/yashitanamdeo.github.io/blob/source/src/images/logo.png" width="100" />
+</div>
+<h1 align="center">
+  Portfolio Website Version 1
+</h1>
+<p align="center">
+  The first iteration of <a href="https://yashitanamdeo.github.io/" target="_blank">Yashita Namdeo's</a> portfolio built with <a href="https://www.gatsbyjs.org/" target="_blank">Gatsby</a> and hosted with <a href="https://pages.github.com/" target="_blank">Github Pages</a>
+</p>
+<!-- <p align="center">
+  Previous iterations:
+  <a href="https://github.com/chandrikadeb7/chandrikadeb7.github.io-v1" target="_blank">Version 1</a>
+</p> -->
 
-## Technologies Used
+<div align="center">
+  <img alt="Demo" src="https://github.com/yashitanamdeo/yashitanamdeo.github.io/blob/source/src/images/demo.png" />
+</div>
 
-- HMTL, CSS, JS
-- Twitter Bootstrap
-- Font Awesome
-- particles.js
-- Masonry.js / Isotope.js
-- wow.js
-- Animate.css
-- Devicon
+### TL;DR
 
-## Guides / Inspirations
+Yes, you can fork this repo. Please give proper credit by linking back to [brittanychiang.com](https://brittanychiang.com). Thanks!
 
-Approach: After learning the basics of HTML, CSS, and Javascript, I sought out to look at other personal websites
-and attempt to practice recreating them without looking at source codes. I then created my website by tweaking and
-applying the code snippets from practice.
+## 🛠 Installation & Set Up
 
-- HTML, CSS, and Javascript for Web Developers (Coursera)
-- [Isotope Websites](https://isotope.metafizzy.co/)
-- [Matthew Williams](http://findmatthew.com/)
-- [Jessdesigntan](http://jessdesigntan.com/)
-- [Gary Sheng](http://www.garysheng.com/)
+1. Install the Gatsby CLI
 
-## React Portfolio
+   ```sh
+   npm install -g gatsby-cli
+   ```
 
-Credits go to [Ashutosh Hathidara](https://github.com/ashutosh1919/masterPortfolio)
+2. Install and use the correct version of Node using [NVM](https://github.com/nvm-sh/nvm)
 
-Approach: Update the JSON infos. Looked at how the website was created and customized the code to depend on my needs.
-Removed Blogs Section and Address Section. Plan to add more relevant projects and updating those READMEs.
+   ```sh
+   nvm install
+   ```
+
+3. Install dependencies
+
+   ```sh
+   yarn
+   ```
+
+4. Start the development server
+
+   ```sh
+   npm start
+   ```
+
+## 🚀 Building and Running for Production
+
+1. Generate a full static production build
+
+   ```sh
+   npm run build
+   ```
+
+1. Preview the site as it will appear once deployed
+
+   ```sh
+   npm run serve
+   ```
+
+## 🎨 Color Reference
+
+| Color          | Hex                                                                |
+| -------------- | ------------------------------------------------------------------ |
+| Navy           | ![#0a192f](https://via.placeholder.com/10/0a192f?text=+) `#0a192f` |
+| Light Navy     | ![#172a45](https://via.placeholder.com/10/0a192f?text=+) `#172a45` |
+| Lightest Navy  | ![#303C55](https://via.placeholder.com/10/303C55?text=+) `#303C55` |
+| Slate          | ![#8892b0](https://via.placeholder.com/10/8892b0?text=+) `#8892b0` |
+| Light Slate    | ![#a8b2d1](https://via.placeholder.com/10/a8b2d1?text=+) `#a8b2d1` |
+| Lightest Slate | ![#ccd6f6](https://via.placeholder.com/10/ccd6f6?text=+) `#ccd6f6` |
+| White          | ![#e6f1ff](https://via.placeholder.com/10/e6f1ff?text=+) `#e6f1ff` |
+| Green          | ![#64ffda](https://via.placeholder.com/10/64ffda?text=+) `#64ffda` |
