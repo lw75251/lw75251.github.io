@@ -74,6 +74,12 @@ export const pageQuery = graphql`
             location
             range
             url
+            positions {
+              title
+              range
+              location
+              points
+            }
           }
           html
         }

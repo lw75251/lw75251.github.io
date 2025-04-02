@@ -154,6 +154,74 @@ const StyledJobDetails = styled.h5`
   }
 `;
 
+const StyledPositionContainer = styled.div`
+  margin-bottom: 30px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const StyledPositionTitle = styled.h4`
+  color: ${colors.lightestSlate};
+  font-size: ${fontSizes.xl};
+  font-weight: 500;
+  margin-bottom: 5px;
+`;
+
+const StyledPositionDetails = styled.h5`
+  font-family: ${fonts.SFMono};
+  font-size: ${fontSizes.sm};
+  font-weight: normal;
+  letter-spacing: 0.05em;
+  color: ${colors.lightSlate};
+  margin-bottom: 20px;
+  svg {
+    width: 15px;
+  }
+`;
+
+const StyledTimeline = styled.div`
+  position: relative;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 5px;
+    bottom: 0;
+    width: 2px;
+    background-color: ${colors.lightestNavy};
+  }
+`;
+
+const StyledTimelineItem = styled.div`
+  position: relative;
+  margin-bottom: 30px;
+  padding-left: 20px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  &:before {
+    content: '';
+    position: absolute;
+    left: -19px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: ${colors.green};
+  }
+`;
+
+const StyledPositionContent = styled.div`
+  ul {
+    ${mixins.fancyList};
+  }
+`;
+
 const Jobs = ({ data }) => {
   const [activeTabId, setActiveTabId] = useState(0);
   const [tabFocus, setTabFocus] = useState(null);
@@ -223,7 +291,8 @@ const Jobs = ({ data }) => {
         {data &&
           data.map(({ node }, i) => {
             const { frontmatter, html } = node;
-            const { title, url, company, range } = frontmatter;
+            const { title, url, company, range, location, positions } = frontmatter;
+            
             return (
               <StyledTabContent
                 key={i}
@@ -233,19 +302,54 @@ const Jobs = ({ data }) => {
                 aria-labelledby={`tab-${i}`}
                 tabIndex={activeTabId === i ? '0' : '-1'}
                 hidden={activeTabId !== i}>
-                <StyledJobTitle>
-                  <span>{title}</span>
-                  <StyledCompany>
-                    <span>&nbsp;@&nbsp;</span>
-                    <a href={url} target="_blank" rel="nofollow noopener noreferrer">
-                      {company}
-                    </a>
-                  </StyledCompany>
-                </StyledJobTitle>
-                <StyledJobDetails>
-                  <span>{range}</span>
-                </StyledJobDetails>
-                <div dangerouslySetInnerHTML={{ __html: html }} />
+                
+                {positions ? (
+                  <StyledTimeline>
+                    {positions.map((position, j) => (
+                      <StyledTimelineItem key={j}>
+                        <StyledPositionTitle>
+                          <span>{position.title}</span>
+                          <StyledCompany>
+                            <span>&nbsp;@&nbsp;</span>
+                            <a href={url} target="_blank" rel="nofollow noopener noreferrer">
+                              {company}
+                            </a>
+                          </StyledCompany>
+                        </StyledPositionTitle>
+                        <StyledPositionDetails>
+                          <span>{position.range}</span>
+                          {position.location && <span> &middot; {position.location}</span>}
+                        </StyledPositionDetails>
+                        {position.points && (
+                          <StyledPositionContent>
+                            <ul>
+                              {position.points.map((point, k) => (
+                                <li key={k}>{point}</li>
+                              ))}
+                            </ul>
+                          </StyledPositionContent>
+                        )}
+                      </StyledTimelineItem>
+                    ))}
+                  </StyledTimeline>
+                ) : (
+                  <>
+                    <StyledJobTitle>
+                      <span>{title}</span>
+                      <StyledCompany>
+                        <span>&nbsp;@&nbsp;</span>
+                        <a href={url} target="_blank" rel="nofollow noopener noreferrer">
+                          {company}
+                        </a>
+                      </StyledCompany>
+                    </StyledJobTitle>
+                    <StyledJobDetails>
+                      <span>{range}</span>
+                      {location && <span> &middot; {location}</span>}
+                    </StyledJobDetails>
+                    <div dangerouslySetInnerHTML={{ __html: html }} />
+                  </>
+                )}
               </StyledTabContent>
             );
           })}

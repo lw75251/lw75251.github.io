@@ -96,6 +96,47 @@ To update content, edit the Markdown files in the `/content` directory:
 - The top section between `---` is frontmatter containing metadata
 - The content below the frontmatter is rendered as the main content
 
+#### Job Experience Format
+
+The `jobs` section supports two formats:
+
+1. **Single position format**:
+   ```yaml
+   ---
+   date: '2024-07-31'
+   title: 'Job Title'
+   company: 'Company Name'
+   location: 'Location'
+   range: 'Start Date - End Date'
+   url: 'https://company-website.com/'
+   ---
+   
+   - Bullet point about achievements
+   - Another bullet point
+   ```
+
+2. **Multiple positions format** (for showing promotions):
+   ```yaml
+   ---
+   date: '2024-07-31'
+   company: 'Company Name'
+   url: 'https://company-website.com/'
+   positions:
+     - title: 'Senior Position Title'
+       range: 'Promotion Date - End Date'
+       location: 'Location'
+       points:
+         - 'Bullet point about achievements in this role'
+         - 'Another bullet point about this role'
+     - title: 'Junior Position Title'
+       range: 'Start Date - Promotion Date'
+       location: 'Location'
+       points:
+         - 'Bullet point about achievements in this role'
+         - 'Another bullet point about this role'
+   ---
+   ```
+
 ### Configuration Updates
 
 The main configuration is in `src/config.js`. Update the following:
@@ -126,6 +167,8 @@ The main configuration is in `src/config.js`. Update the following:
 ## 📝 Changelog
 
 ### April 2024
+- Added support for displaying multiple positions at the same company with a timeline UI
+- Updated job entry format to include `positions` array for showing career progression
 - Added blog functionality with first welcome post
 - Added Blog navigation link to the header
 - Personalized the site with custom information
