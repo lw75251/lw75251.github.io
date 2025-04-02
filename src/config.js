@@ -53,6 +53,10 @@ module.exports = {
       name: 'Contact',
       url: '/#contact',
     },
+    {
+      name: 'Blog',
+      url: '/pensieve',
+    },
   ],
 
   navHeight: 100,

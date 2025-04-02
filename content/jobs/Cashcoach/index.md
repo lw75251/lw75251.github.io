@@ -1,6 +1,6 @@
 ---
 date: '2020-06-30'
-title: 'Junior Full-Stack Software Engineer'
+title: 'Full-Stack Software Engineer'
 company: 'Novamoney'
 location: remote
 range: 'Feb 2020 - Jun 2020'

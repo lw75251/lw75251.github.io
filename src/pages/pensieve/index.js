@@ -123,19 +123,19 @@ const PensievePage = ({ location, data }) => {
   return (
     <Layout location={location}>
       <Helmet>
-        <title>Pensieve | Yashita Namdeo</title>
-        <link rel="canonical" href="https://github.com/yashitanamdeo/pensieve" />
+        <title>Blog | Leon Wu</title>
+        <link rel="canonical" href="https://lw75251.github.io/pensieve" />
       </Helmet>
 
       <StyledMainContainer>
         <header>
-          <h1 className="big-title">Pensieve</h1>
+          <h1 className="big-title">Blog</h1>
           <p className="subtitle">
             <a
               href="https://www.wizardingworld.com/writing-by-jk-rowling/pensieve"
               target="_blank"
               rel="noopener noreferrer">
-              a collection of memories
+              a collection of thoughts and learnings
             </a>
           </p>
         </header>
