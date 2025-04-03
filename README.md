@@ -167,6 +167,18 @@ The main configuration is in `src/config.js`. Update the following:
 ## 📝 Changelog
 
 ### April 2024
+- Updated links across the site:
+  - Updated GitHub profile URL to correct address: https://github.com/lw75251/
+  - Updated resume.pdf with the local file (Leon_Wu_Data_Sci_Mar_2025.pdf)
+  - Verified correct email (lw75251@gmail.com) and LinkedIn URL (https://www.linkedin.com/in/aleonwu/)
+- Changed the logo icon from "Y" to "L" in both the loading animation and navigation header
+  - Updated SVG text element in src/components/icons/loader.js
+  - Updated SVG text element in src/components/icons/logo.js
+  - Adjusted x coordinates from 40px to 36px in loader.js and from 35px to 32px in logo.js to properly center the letter "L" visually in the hexagon
+- Added support for multiple subtitles in the hero section
+  - New `subtitles` array in hero frontmatter allows multiple lines of subtitles
+  - Updated hero component to render subtitle lines individually
+  - Maintained backward compatibility with the single `subtitle` field
 - Added support for displaying multiple positions at the same company with a timeline UI
 - Updated job entry format to include `positions` array for showing career progression
 - Added blog functionality with first welcome post

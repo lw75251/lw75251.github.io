@@ -11,12 +11,12 @@ module.exports = {
   name: 'Leon Wu',
   location: 'New York City, NY',
   email: 'lw75251@gmail.com',
-  github: 'https://lw75251.github.io/',
+  github: 'https://github.com/lw75251/',
   twitterHandle: '@',
   socialMedia: [
     {
       name: 'GitHub',
-      url: 'https://lw75251.github.io/',
+      url: 'https://github.com/lw75251/',
     },
     {
       name: 'Linkedin',
