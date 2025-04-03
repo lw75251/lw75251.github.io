@@ -17,13 +17,15 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'Yashita Namdeo',
-        short_name: 'Yashita Namdeo',
+        name: 'Leon Wu',
+        short_name: 'Leon Wu',
         start_url: '/',
         background_color: config.colors.darkNavy,
         theme_color: config.colors.navy,
         display: 'minimal-ui',
-        icon: 'src/images/logo.png',
+        icon: 'src/images/favicons/favicon-32x32.png',
+        legacy: false,
+        include_favicon: true,
       },
     },
     `gatsby-plugin-offline`,

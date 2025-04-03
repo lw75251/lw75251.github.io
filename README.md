@@ -167,6 +167,16 @@ The main configuration is in `src/config.js`. Update the following:
 ## 📝 Changelog
 
 ### April 2024
+- Updated website favicons for improved branding consistency
+  - Replaced the previous logo.png with custom favicon files in various sizes (16x16, 32x32, 192x192, 512x512)
+  - Simplified favicon implementation by using the actual favicon files directly without additional processing
+  - Updated `src/components/head.js` to use only the available favicon files:
+    - Removed references to non-existent favicon files
+    - Added support for apple-touch-icon.png
+    - Added support for android-chrome-192x192.png and android-chrome-512x512.png
+  - Configured gatsby-plugin-manifest to use favicon-32x32.png as the main icon source
+  - Disabled legacy favicon behavior for modern browser compatibility
+  - Fixed the canonical URL to use the site URL from metadata
 - Fixed formatting issue in Indeed job description:
   - Added missing closing quote in the last bullet point of the Senior Business Analyst position
   - Resolved GraphQL query error related to the "positions" field in MarkdownRemarkFrontmatter
