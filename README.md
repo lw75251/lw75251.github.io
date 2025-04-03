@@ -169,7 +169,7 @@ The main configuration is in `src/config.js`. Update the following:
 ### April 2024
 - Updated links across the site:
   - Updated GitHub profile URL to correct address: https://github.com/lw75251/
-  - Updated resume.pdf with the local file (Leon_Wu_Data_Sci_Mar_2025.pdf)
+  - Updated resume.pdf in the static directory with the latest version (Leon_Wu_Data_Sci_Mar_2025.pdf)
   - Verified correct email (lw75251@gmail.com) and LinkedIn URL (https://www.linkedin.com/in/aleonwu/)
 - Changed the logo icon from "Y" to "L" in both the loading animation and navigation header
   - Updated SVG text element in src/components/icons/loader.js
