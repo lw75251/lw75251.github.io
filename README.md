@@ -167,6 +167,16 @@ The main configuration is in `src/config.js`. Update the following:
 ## 📝 Changelog
 
 ### April 2024
+- Fixed formatting issue in Indeed job description:
+  - Added missing closing quote in the last bullet point of the Senior Business Analyst position
+  - Resolved GraphQL query error related to the "positions" field in MarkdownRemarkFrontmatter
+- Enhanced About section image display:
+  - Increased image container width from 40% to 50% and max-width from 300px to 400px
+  - Added min-height of 500px to ensure proper vertical display of the image
+  - Set 3:4 aspect ratio and configured object-fit properties for better image rendering
+  - Improved image quality by increasing maxWidth to 1000px and quality to 95% in GraphQL query
+  - Adjusted content area width from 60% to 50% to maintain layout balance
+  - Improved mobile responsiveness by increasing phablet image width from 70% to 80%
 - Fixed image caching issues with the profile picture:
   - Renamed the profile image to `me-new.jpg` to bypass browser and Gatsby caching
   - Added documentation on clearing Gatsby cache when updating images using `gatsby clean`

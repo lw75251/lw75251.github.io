@@ -16,13 +16,23 @@ const StyledFlexContainer = styled.div`
   ${media.tablet`display: block;`};
 `;
 const StyledContent = styled.div`
-  width: 60%;
+  width: 50%;
   max-width: 480px;
   ${media.tablet`width: 100%;`};
   a {
     ${mixins.inlineLink};
   }
 `;
+
+const StyledAboutText = styled.div`
+  font-size: ${fontSizes.md};
+  line-height: 1.5;
+  
+  p {
+    margin-bottom: 12px;
+  }
+`;
+
 const SkillsContainer = styled.ul`
   display: grid;
   grid-template-columns: repeat(2, minmax(140px, 200px));
@@ -49,11 +59,12 @@ const Skill = styled.li`
 `;
 const StyledPic = styled.div`
   position: relative;
-  width: 40%;
-  max-width: 300px;
+  width: 50%;
+  max-width: 400px;
+  height: auto;
   margin-left: 60px;
   ${media.tablet`margin: 60px auto 0;`};
-  ${media.phablet`width: 70%;`};
+  ${media.phablet`width: 80%;`};
   a {
     &:focus {
       outline: 0;
@@ -66,10 +77,16 @@ const StyledAvatar = styled(Img)`
   filter: grayscale(100%) contrast(1);
   border-radius: ${theme.borderRadius};
   transition: ${theme.transition};
+  height: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: center top;
 `;
 const StyledAvatarLink = styled.a`
   ${mixins.boxShadow};
   width: 100%;
+  height: 100%;
+  min-height: 500px;
   position: relative;
   border-radius: ${theme.borderRadius};
   background-color: ${colors.lightestSlate};
@@ -123,14 +140,18 @@ const About = ({ data }) => {
       <Heading>{title}</Heading>
       <StyledFlexContainer>
         <StyledContent>
-          <div dangerouslySetInnerHTML={{ __html: html }} />
+          <StyledAboutText dangerouslySetInnerHTML={{ __html: html }} />
           <SkillsContainer>
             {skills && skills.map((skill, i) => <Skill key={i}>{skill}</Skill>)}
           </SkillsContainer>
         </StyledContent>
         <StyledPic>
           <StyledAvatarLink href={github}>
-            <StyledAvatar fluid={avatar.childImageSharp.fluid} alt="Avatar" />
+            <StyledAvatar 
+              fluid={avatar.childImageSharp.fluid} 
+              alt="Avatar"
+              imgStyle={{ objectFit: 'cover', objectPosition: 'center top' }}
+            />
           </StyledAvatarLink>
         </StyledPic>
       </StyledFlexContainer>

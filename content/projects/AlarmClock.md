@@ -1,13 +1,13 @@
 ---
-date: '2020-02-12'
-title: 'Alarm Clock'
-github: 'https://github.com/yashitanamdeo/AlarmClock'
-external: ''
+date: '2024-01-01'
+title: 'Quairy'
+github: 'https://github.com/lw75251/datasetai'
+external: 'https://drive.google.com/file/d/1a6rkwFFihXrUScXyXk4PO7Xcjpe55ctL/view?usp=sharing'
 tech:
-  - Python
-  - Tkinter
+  - Streamlit
+  - Langchain
 company: ''
 showInProjects: true
 ---
 
-This alarm clock is a simple clock with a function that can be activated to ring at a time set in advance.
+Early-prototype version of Text-to-SQL where I created a demo to sell to businesses (back in late 2023). Utilizes ReAct Agents, Vector Search RAG. 

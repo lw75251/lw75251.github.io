@@ -4,10 +4,14 @@ title: 'Data Scientist'
 company: 'Rauxa'
 location: Remote - NYC
 range: 'Feb 2020 - Oct 2021'
-url: 'https://www.internationalmun.org/'
+url: 'https://www.publicisgroupe.com/en'
 ---
 
-- Promoted IMUN Online Conferences in different schools/universities and got 10+ registrations.
-- Informed how MUNs enhance - Negotiation, Diplomacy, Leadership, etc.
-- Achieved Brand Ambassador title for increasing the sales of the organization by 10% and creating brand presence.
-- View [OFFER LETTER](https://drive.google.com/file/d/1q-rr54_-9znx-m1PvEDTYkbu5yGy0miK/view?usp=sharing)
+- Led A/B Testing on Facebook Ads, increasing Conversions by 15% and reducing Cost-per-Conversion by
+66% YoY for Piedmont Health.
+- Modernized media data tech stack (Data Warehousing, ETLs), by integrating competitor web-scraping
+(Puppeteer) and 3rd party data sources (Web Scraping / Purchasing Data) for analytics
+- Built 3 real-time Python web apps, using above data, to help secure five new large clients and won
+additional work with Verizon and Alaska Air generating $1M+ more revenue for the company.
+- Developed ML Churn models, Marketing Attribution models, Google Tag Manager integrations, and
+monitoring and communicating performance of Marketing Campaign KPIs for clients.

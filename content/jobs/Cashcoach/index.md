@@ -1,7 +1,7 @@
 ---
 date: '2020-06-30'
 title: 'Full-Stack Software Engineer'
-company: 'Novamoney'
+company: 'Nova Money'
 location: remote
 range: 'Feb 2020 - Jun 2020'
 url: 'https://www.linkedin.com/company/novamoney-ai/'
