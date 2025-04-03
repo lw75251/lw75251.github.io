@@ -167,6 +167,10 @@ The main configuration is in `src/config.js`. Update the following:
 ## 📝 Changelog
 
 ### April 2024
+- Fixed image caching issues with the profile picture:
+  - Renamed the profile image to `me-new.jpg` to bypass browser and Gatsby caching
+  - Added documentation on clearing Gatsby cache when updating images using `gatsby clean`
+  - Resolved build errors related to static file resolution by cleaning cache before building
 - Updated links across the site:
   - Updated GitHub profile URL to correct address: https://github.com/lw75251/
   - Updated resume.pdf in the static directory with the latest version (Leon_Wu_Data_Sci_Mar_2025.pdf)
@@ -186,3 +190,33 @@ The main configuration is in `src/config.js`. Update the following:
 - Personalized the site with custom information
 - Updated configuration in src/config.js with personal details
 - Updated README.md with project structure and maintenance instructions
+
+## 🔍 Troubleshooting
+
+### Image Caching Issues
+
+If updated images aren't reflecting in the built site:
+
+1. **Clear Gatsby's Cache**
+   ```sh
+   gatsby clean
+   # or
+   npm run clean
+   ```
+
+2. **Rebuild the Site**
+   ```sh
+   npm run build
+   ```
+
+3. **Verify Changes**
+   ```sh
+   npm run serve
+   ```
+
+This is particularly important when:
+- Replacing profile images or project screenshots with the same filename
+- Making changes to CSS or other assets that might be cached
+- Experiencing build errors related to missing static files
+
+For stubborn caching issues, try giving your new image a different filename (e.g., `profile-v2.jpg` instead of `profile.jpg`) and updating all references to it.
