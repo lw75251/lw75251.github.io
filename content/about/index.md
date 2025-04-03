@@ -1,6 +1,6 @@
 ---
 title: 'About Me'
-avatar: 'me.jpg'
+avatar: 'me-new.jpg'
 skills:
   - Always Learning
   - Mentoring
