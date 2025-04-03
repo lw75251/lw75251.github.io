@@ -177,7 +177,7 @@ The main configuration is in `src/config.js`. Update the following:
   - Adjusted x coordinates from 40px to 36px in loader.js and from 35px to 32px in logo.js to properly center the letter "L" visually in the hexagon
 - Added support for multiple subtitles in the hero section
   - New `subtitles` array in hero frontmatter allows multiple lines of subtitles
-  - Updated hero component to render subtitle lines individually
+  - Updated hero component to render subtitle lines individually with smaller font size
   - Maintained backward compatibility with the single `subtitle` field
 - Added support for displaying multiple positions at the same company with a timeline UI
 - Updated job entry format to include `positions` array for showing career progression

@@ -35,13 +35,13 @@ const StyledTitle = styled.h2`
   ${media.phone`font-size: 40px;`};
 `;
 const StyledSubtitle = styled.h3`
-  font-size: 80px;
+  font-size: 50px;
   line-height: 1.1;
   color: ${colors.slate};
-  ${media.desktop`font-size: 70px;`};
-  ${media.tablet`font-size: 60px;`};
-  ${media.phablet`font-size: 50px;`};
-  ${media.phone`font-size: 40px;`};
+  ${media.desktop`font-size: 40px;`};
+  ${media.tablet`font-size: 30px;`};
+  ${media.phablet`font-size: 30px;`};
+  ${media.phone`font-size: 20px;`};
 `;
 const StyledDescription = styled.div`
   margin-top: 25px;
@@ -72,9 +72,30 @@ const Hero = ({ data }) => {
   const two = () => (
     <StyledTitle style={{ transitionDelay: '200ms' }}>{frontmatter.name}.</StyledTitle>
   );
-  const three = () => (
-    <StyledSubtitle style={{ transitionDelay: '300ms' }}>{frontmatter.subtitle}</StyledSubtitle>
-  );
+  
+  // Handle both single subtitle (string) and multiple subtitles (array)
+  const three = () => {
+    // If subtitles is an array, render each subtitle on its own line
+    if (frontmatter.subtitles && Array.isArray(frontmatter.subtitles)) {
+      return (
+        <div style={{ transitionDelay: '300ms' }}>
+          {frontmatter.subtitles.map((subtitle, i) => (
+            <StyledSubtitle key={i} style={{ marginBottom: i !== frontmatter.subtitles.length - 1 ? '5px' : '0' }}>
+              {subtitle}
+            </StyledSubtitle>
+          ))}
+        </div>
+      );
+    }
+    
+    // Backward compatibility for single subtitle
+    return (
+      <StyledSubtitle style={{ transitionDelay: '300ms' }}>
+        {frontmatter.subtitle || (frontmatter.subtitles && frontmatter.subtitles[0]) || ''}
+      </StyledSubtitle>
+    );
+  };
+  
   const four = () => (
     <StyledDescription
       style={{ transitionDelay: '400ms' }}
