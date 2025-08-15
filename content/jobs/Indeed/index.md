@@ -4,7 +4,7 @@ company: 'Indeed'
 url: 'https://www.indeed.com/'
 positions:
   - title: 'Senior Product Scientist'
-    range: 'Oct 2021 - Present'
+    range: 'Oct 2021 - May 2025'
     location: 'Remote - NYC'
     points:
       - 'Prototyped Indeed’s Text-to-SQL Chatbot using OpenAI in Jan 2023, enabling non-technical users to query data and standardizing complex business rules across orgs. Led system design, development, and product demos. Scaled the project to a team of 6, supporting 2000+ WAUs, including senior leadership.'
