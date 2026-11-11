@@ -8,6 +8,12 @@
   Personal portfolio built with <a href="https://www.gatsbyjs.org/" target="_blank">Gatsby</a> and hosted with <a href="https://pages.github.com/" target="_blank">Github Pages</a>
 </p>
 
+> [!WARNING]
+> **Frozen — do not run `yarn install` / `gatsby develop` as-is.** This site is on Gatsby 2 and its
+> dependency tree had 877 known vulnerabilities (59 critical) as of Nov 2026. The deployed site is
+> static HTML and is unaffected, but installing and running the build tooling locally executes
+> outdated, vulnerable packages. Upgrade Gatsby (or migrate frameworks) before building again.
+
 <div align="center">
   <img alt="Demo" src="https://github.com/lw75251/lw75251.github.io/blob/source/src/images/demo.png" />
 </div>
