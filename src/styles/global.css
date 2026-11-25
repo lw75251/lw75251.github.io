@@ -47,6 +47,7 @@ body {
   margin-inline: auto;
   padding-inline: 20px;
 }
+.wrap.wide { max-width: 64rem; }
 
 a { color: inherit; text-decoration-color: var(--faint); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
 a:hover { color: var(--accent); text-decoration-color: currentColor; }

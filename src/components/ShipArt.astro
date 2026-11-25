@@ -1,0 +1,125 @@
+---
+/**
+ * Small generated data-visualizations used as card art for shipped work,
+ * so the site needs no screenshots of internal tools. Deterministic per kind.
+ */
+type Kind = 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
+interface Props { kind: Kind; label: string }
+const { kind, label } = Astro.props;
+
+function rng(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const W = 400, H = 200;
+const r = rng(kind.length * 9973 + kind.charCodeAt(0));
+const path = (pts: [number, number][]) => pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
+
+// agent: a question, then a chart that answers it
+const agentLine = Array.from({ length: 24 }, (_, i) => [40 + i * 14, 150 - i * 2.2 - Math.sin(i / 2) * 8 - r() * 8] as [number, number]);
+
+// classifier: two clusters and a boundary
+const dots = Array.from({ length: 70 }, (_, i) => {
+  const b = i % 4 === 0; // roughly a quarter in the second class
+  const cx = b ? 285 : 140, cy = b ? 80 : 115;
+  const a = r() * Math.PI * 2, d = Math.sqrt(r()) * (b ? 55 : 80);
+  return { x: cx + Math.cos(a) * d * 1.3, y: cy + Math.sin(a) * d * 0.7, b };
+});
+
+// threshold: conversion vs usage, with a cutoff
+const sCurve = Array.from({ length: 41 }, (_, i) => {
+  const x = 30 + i * 8.5, t = (i - 22) / 4;
+  return [x, 165 - 120 / (1 + Math.exp(-t))] as [number, number];
+});
+const tx = 30 + 22 * 8.5;
+
+// metric: one consistent line through growth
+const metric = Array.from({ length: 30 }, (_, i) => [30 + i * 12, 170 - Math.pow(i / 29, 1.8) * 125 - (r() - 0.5) * 3] as [number, number]);
+
+// forecast: history, then an uncertainty fan
+const hist = Array.from({ length: 20 }, (_, i) => [30 + i * 11, 120 - i * 1.2 + Math.sin(i / 1.6) * 14 + (r() - 0.5) * 8] as [number, number]);
+const [lx, ly] = hist[hist.length - 1];
+const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1) * 1.5, (i + 1) * 3.2] as [number, number, number]);
+---
+<svg class="art" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} preserveAspectRatio="xMidYMid slice">
+  <rect width={W} height={H} class="bg" />
+  {kind === 'agent' && (
+    <>
+      <rect x="40" y="28" width="250" height="30" rx="15" class="bubble" />
+      <text x="58" y="48" class="mono">what drove signups last week?</text>
+      <path d={path(agentLine)} class="line" />
+      <circle cx={agentLine[agentLine.length - 1][0]} cy={agentLine[agentLine.length - 1][1]} r="5" class="dot" />
+      <line x1="40" y1="170" x2="370" y2="170" class="axis" />
+    </>
+  )}
+  {kind === 'classifier' && (
+    <>
+      {dots.map((d) => <circle cx={d.x} cy={d.y} r="3.6" class={d.b ? 'dot' : 'pt'} />)}
+      <line x1="215" y1="20" x2="250" y2="185" class="dash" />
+    </>
+  )}
+  {kind === 'threshold' && (
+    <>
+      <line x1="30" y1="170" x2="375" y2="170" class="axis" />
+      <path d={path(sCurve)} class="line" />
+      <line x1={tx} y1="22" x2={tx} y2="170" class="dash" />
+      <circle cx={tx} cy={165 - 60} r="5.5" class="dot" />
+      <text x={tx + 10} y="36" class="mono small">upgrade prompt here</text>
+    </>
+  )}
+  {kind === 'metric' && (
+    <>
+      <path d={`${path(metric)} L${metric[metric.length - 1][0]} 175 L30 175 Z`} class="area" />
+      <path d={path(metric)} class="line" />
+      {[14, 23].map((i) => <circle cx={metric[i][0]} cy={metric[i][1]} r="5" class="dot" />)}
+      <text x="30" y="30" class="mono small">one definition · reproducible from raw data</text>
+    </>
+  )}
+  {kind === 'leads' && (
+    <>
+      {[300, 230, 165, 110].map((w, i) => (
+        <rect x={(W - w) / 2} y={30 + i * 38} width={w} height="26" rx="4" class={i === 3 ? 'barA' : 'bar'} />
+      ))}
+    </>
+  )}
+  {kind === 'sql' && (
+    <>
+      <text x="40" y="58" class="mono code"><tspan class="kw">select</tspan> week, count(distinct user_id)</text>
+      <text x="40" y="86" class="mono code"><tspan class="kw">from</tspan> <tspan class="hl">metrics.active_users</tspan></text>
+      <text x="40" y="114" class="mono code"><tspan class="kw">where</tspan> not is_internal</text>
+      <text x="40" y="142" class="mono code"><tspan class="kw">group by</tspan> 1</text>
+    </>
+  )}
+  {kind === 'forecast' && (
+    <>
+      <path d={`M${lx} ${ly} ${fan.map(([x, y, s]) => `L${x} ${y - s}`).join(' ')} ${[...fan].reverse().map(([x, y, s]) => `L${x} ${y + s}`).join(' ')} Z`} class="area" />
+      <path d={path(hist)} class="line" />
+      <path d={path([[lx, ly], ...fan.map(([x, y]) => [x, y] as [number, number])])} class="dash" />
+      <circle cx={lx} cy={ly} r="5" class="dot" />
+    </>
+  )}
+</svg>
+
+<style>
+  .art { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; }
+  .bg { fill: var(--surface); }
+  .line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .dash { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 5; }
+  .axis { stroke: var(--rule); stroke-width: 1.5; }
+  .dot { fill: var(--accent); }
+  .pt { fill: var(--line); opacity: 0.55; }
+  .area { fill: var(--accent); opacity: 0.1; }
+  .bubble { fill: var(--bg); stroke: var(--rule); }
+  .bar { fill: var(--line); opacity: 0.35; }
+  .barA { fill: var(--accent); }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; fill: var(--muted); }
+  .mono.small { font-size: 11px; }
+  .mono.code { font-size: 15px; fill: var(--ink); }
+  .kw { fill: var(--muted); }
+  .hl { fill: var(--accent); }
+</style>

@@ -1,121 +1,239 @@
 ---
 import Base from '../layouts/Base.astro';
 import Signal from '../components/Signal.astro';
-import { SITE, RESUME_MAILTO, getWriting, getForecasts, formatDate } from '../site';
-import { brier } from '../lib/forecasts';
+import ShipArt from '../components/ShipArt.astro';
+import { SITE, RESUME_MAILTO, getWriting, formatDate } from '../site';
 
-const writing = (await getWriting()).slice(0, 5);
-const resolved = getForecasts().filter((f) => f.outcome !== undefined);
+const writing = (await getWriting()).slice(0, 4);
 
-const work = [
+type Ship = {
+  where: string;
+  title: string;
+  what: string;
+  art: 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
+};
+
+const featured: Ship = {
+  where: 'Replit · AI for data',
+  title: 'Oracle',
+  what: 'Replit’s internal AI data analyst. Ask a question in plain English and it answers from the warehouse, through a semantic layer the whole company agrees on. Over half the company uses it every week, and it replaced Hex and Amplitude, saving seven figures a year. I engineered and led it.',
+  art: 'agent',
+};
+
+const ships: Ship[] = [
   {
-    company: 'Replit',
-    href: 'https://replit.com',
-    title: 'Founding Member of Technical Staff, Data (Staff)',
-    points: [
-      { text: 'Growth, monetization and revenue metrics, and the data stack underneath them.' },
-      { lead: 'Oracle', text: 'replaced Hex and Amplitude, saving seven figures a year.' },
-    ],
+    where: 'Replit · Product research',
+    title: 'What new users actually wanted',
+    what: 'An LLM classifier, checked against human labels, read new users’ first messages. A large share wanted a conversation, not an app, and the product changed because of it.',
+    art: 'classifier',
   },
   {
-    company: 'Indeed',
-    href: 'https://www.indeed.com',
-    title: 'BI Analyst → Senior Data Scientist, Finance',
-    points: [
-      { text: 'Revenue forecasting, lifetime-value models, and the revenue data mart.' },
-      { lead: 'Text-to-SQL', text: 'prototyped in January 2023; it grew into a 10-person team.' },
-    ],
+    where: 'Replit · Monetization',
+    title: 'Pro upgrade prompt',
+    what: 'Found the usage threshold that signals Pro fit, then shipped an in-product upgrade prompt at that moment. Conversions multiplied.',
+    art: 'threshold',
   },
   {
-    company: 'Rauxa',
-    href: 'https://www.rauxa.com',
-    title: 'Data Scientist',
-    points: [{ text: 'Marketing analytics and experimentation.' }],
+    where: 'Replit · Finance',
+    title: 'One ARR',
+    what: 'Standardized ARR and every revenue and investor metric, and kept them consistent through two fundraises.',
+    art: 'metric',
+  },
+  {
+    where: 'Replit · Sales',
+    title: 'Product-qualified leads',
+    what: 'Lead scoring from product usage, plus waterfall enrichment from third-party data. It became the main source of enterprise pipeline.',
+    art: 'leads',
+  },
+  {
+    where: 'Indeed · January 2023',
+    title: 'Text-to-SQL assistant',
+    what: 'Prototyped before it was a category. It grew into a 10-person team and 2,000+ weekly users, including senior leadership.',
+    art: 'sql',
+  },
+  {
+    where: 'Indeed · Forecasting',
+    title: 'Self-serve forecasting',
+    what: 'A forecasting app on SageMaker and MLflow. 20+ teams used it to build and manage 2,000+ models.',
+    art: 'forecast',
   },
 ];
 
+const background = [
+  { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.' },
+  { org: 'Indeed', role: 'BI Analyst → Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
+  { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
+  { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
+];
 ---
-<Base>
-  <section class="hero" aria-labelledby="name">
-    <h1 id="name" class="visually-hidden">Leon Wu</h1>
-    <p class="kicker">Data science · data engineering · AI for data</p>
-    <p class="lede">
-      I built <em>Oracle</em>, Replit's AI data analyst. Over half the company asks it questions every week.
-    </p>
-    <figure class="hero-fig">
-      <Signal seed="hero" width={640} height={64} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
-      <figcaption>A random walk with one real shift. My job is finding the dot.</figcaption>
-    </figure>
-    <p class="bio">
-      I'm on Replit's founding data team, working on growth, monetization and revenue. I also own the data
-      underneath: event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.
-    </p>
+<Base wide>
+  <section class="intro card" aria-labelledby="name">
+    <div class="intro-text">
+      <h1 id="name">Leon Wu</h1>
+      <p class="role">Founding Member of Technical Staff, Data (Staff) @ Replit</p>
+      <p class="hook">
+        Built <strong>Oracle</strong>, Replit’s AI data analyst. I also own growth, monetization and revenue analytics,
+        and the data stack underneath. Previously at Indeed.
+      </p>
+      <p class="links">
+        <a href={`mailto:${SITE.email}`}>Email</a>
+        <a href={SITE.linkedin}>LinkedIn</a>
+        <a href={SITE.github}>GitHub</a>
+        <a href={RESUME_MAILTO}>Resume</a>
+      </p>
+    </div>
+    <img src="/leon.jpg" alt="Portrait of Leon Wu" width="667" height="1000" class="intro-photo" />
   </section>
 
-  <section aria-labelledby="work">
-    <h2 class="kicker" id="work">Work</h2>
-    <ul class="entries jobs">
-      {work.map((w) => (
-        <li>
-          <div class="row">
-            <span class="title"><a href={w.href} class="co">{w.company}</a> <span class="role">{w.title}</span></span>
-            {w.points.map((pt) => (
-              <span class="desc">{pt.lead && <strong>{pt.lead} </strong>}{pt.text}</span>
-            ))}
+  <nav class="chips" aria-label="Sections">
+    <a href="#shipped">Shipped</a>
+    {writing.length > 0 && <a href="#writing">Writing</a>}
+    <a href="#background">Background</a>
+  </nav>
+
+  <section id="shipped" aria-labelledby="shipped-h">
+    <header class="sec-head">
+      <h2 id="shipped-h">Shipped</h2>
+      <span class="sec-label">What I built</span>
+    </header>
+
+    <article class="card featured">
+      <ShipArt kind={featured.art} label="Illustration: a plain-English question answered with a chart" />
+      <div class="body">
+        <p class="where">{featured.where}</p>
+        <h3>{featured.title}</h3>
+        <p class="what">{featured.what}</p>
+      </div>
+    </article>
+
+    <div class="grid">
+      {ships.map((s) => (
+        <article class="card">
+          <ShipArt kind={s.art} label={`Illustration for ${s.title}`} />
+          <div class="body">
+            <p class="where">{s.where}</p>
+            <h3>{s.title}</h3>
+            <p class="what">{s.what}</p>
           </div>
-        </li>
+        </article>
       ))}
-    </ul>
+    </div>
   </section>
 
   {writing.length > 0 && (
-    <section aria-labelledby="writing">
-      <h2 class="kicker" id="writing">Writing</h2>
-      <ul class="entries">
+    <section id="writing" aria-labelledby="writing-h">
+      <header class="sec-head">
+        <h2 id="writing-h">Writing</h2>
+        <a class="sec-label" href="/writing">All essays →</a>
+      </header>
+      <div class="grid two">
         {writing.map((p) => (
-          <li>
-            <a href={`/writing/${p.id}/`}>
-              <span class="sig">
-                <Signal seed={p.id} />
-                <span class="title">{p.data.title}</span>
-              </span>
-              <span class="meta">{formatDate(p.data.date)}</span>
-            </a>
-          </li>
+          <a class="card post" href={`/writing/${p.id}/`}>
+            <Signal seed={p.id} width={140} height={32} points={36} />
+            <p class="where">{formatDate(p.data.date)}</p>
+            <h3>{p.data.title}</h3>
+            <p class="what">{p.data.description}</p>
+          </a>
         ))}
-      </ul>
+      </div>
     </section>
   )}
 
-  {resolved.length >= 5 && (
-    <section aria-labelledby="calibration">
-      <h2 class="kicker" id="calibration">Calibration</h2>
-      <p>
-        Brier score <strong>{brier(resolved).toFixed(2)}</strong> across {resolved.length} resolved public forecasts.
-        <a href="/forecasts">See every forecast →</a>
-      </p>
-    </section>
-  )}
-
-
-  <section aria-labelledby="hello">
-    <h2 class="kicker" id="hello">Get in touch</h2>
-    <p>
-      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' · '}<a href={SITE.linkedin}>LinkedIn</a>{' · '}<a href={RESUME_MAILTO}>Resume on request</a>
-    </p>
+  <section id="background" aria-labelledby="background-h">
+    <header class="sec-head">
+      <h2 id="background-h">Background</h2>
+      <span class="sec-label">Career & education</span>
+    </header>
+    <div class="bg-wrap">
+      <div class="card table">
+        {background.map((b) => (
+          <div class="tr">
+            <span class="org">{b.org}</span>
+            <span><span class="r">{b.role}</span><span class="w">{b.what}</span></span>
+          </div>
+        ))}
+      </div>
+      <div class="card contact">
+        <p class="sec-label">Contact</p>
+        <Signal seed="contact" width={160} height={34} points={30} class="contact-sig" />
+        <p class="say"><a href={`mailto:${SITE.email}`}>Say hello ↗</a></p>
+        <p class="small">{SITE.email}<br />Resume <a href={RESUME_MAILTO}>on request</a></p>
+      </div>
+    </div>
   </section>
 </Base>
 
 <style>
-  .hero .kicker { margin-bottom: 1.5rem; }
-  .hero .lede { max-width: 36rem; }
-  .hero-fig { margin: 2.25rem 0 2rem; }
-  .hero :global(.hero-signal) { width: 100%; height: auto; color: var(--line); }
-  .hero-fig figcaption { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.6rem; }
-  .jobs .desc strong { color: var(--ink); font-weight: 600; }
-  .jobs .desc + .desc { margin-top: 0.5rem; }
-  .bio { margin: 0; max-width: 35rem; color: var(--muted); }
-  .jobs .co { display: inline; padding: 0; text-decoration: none; }
-  .jobs .role { font-family: var(--sans); font-size: 0.92rem; color: var(--muted); margin-left: 0.4rem; }
-  @media (max-width: 560px) { .jobs .role { display: block; margin: 0.15rem 0 0; } }
+  main { padding-top: 2.5rem; }
+  .card { background: color-mix(in srgb, var(--surface) 55%, var(--bg)); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+
+  /* Intro */
+  .intro { display: grid; grid-template-columns: 1fr 10rem; gap: 2rem; padding: 2rem 2.25rem; align-items: center; }
+  .intro h1 { font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem); }
+  .role { font-size: 0.95rem; color: var(--muted); margin: 0.6rem 0 0; }
+  .hook { margin: 0.4rem 0 0; max-width: 36rem; }
+  .hook strong { font-weight: 600; color: var(--accent); }
+  .links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 1.1rem 0 0; font-size: 0.9rem; }
+  .links a { padding-block: 0.4rem; }
+  .intro-photo { width: 10rem; height: 12rem; object-fit: cover; object-position: 50% 30%; border-radius: 10px; }
+
+  /* Section chips */
+  .chips { display: flex; justify-content: center; gap: 0.25rem; margin: 2rem auto 0; padding: 0.3rem; width: fit-content; border: 1px solid var(--rule); border-radius: 999px; font-size: 0.85rem; }
+  .chips a { text-decoration: none; padding: 0.45rem 0.95rem; border-radius: 999px; color: var(--muted); }
+  .chips a:hover { background: var(--surface); color: var(--ink); }
+
+  section + section, .chips + section { margin-top: 3.5rem; }
+  .sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.1rem; }
+  .sec-head h2 { font-size: 1.75rem; }
+  .sec-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  a.sec-label { text-decoration: none; }
+
+  /* Cards */
+  .body, .post { padding: 1.1rem 1.25rem 1.3rem; }
+  .where { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.45rem; }
+  .card h3 { font-size: 1.2rem; }
+  .what { font-size: 0.9rem; color: var(--muted); margin: 0.5rem 0 0; line-height: 1.55; }
+
+  .featured { display: grid; grid-template-columns: 1.35fr 1fr; margin-bottom: 1rem; }
+  .featured :global(.art) { height: 100%; aspect-ratio: auto; min-height: 15rem; }
+  .featured .body { padding: 1.75rem; display: flex; flex-direction: column; justify-content: center; }
+  .featured h3 { font-size: 1.8rem; }
+  .featured .what { font-size: 0.98rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .grid.two { grid-template-columns: repeat(2, 1fr); }
+  .post { display: block; text-decoration: none; }
+  .post:hover h3 { color: var(--accent); }
+  .post :global(.signal) { margin-bottom: 1rem; }
+
+  /* Background */
+  .bg-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; }
+  .table { padding: 0.4rem 1.5rem; }
+  .tr { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .tr:last-child { border-bottom: 0; }
+  .org { font-family: var(--serif); font-size: 1.1rem; }
+  .r { display: block; font-size: 0.92rem; }
+  .w { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
+  .contact { background: var(--ink); color: var(--bg); border-color: var(--ink); padding: 1.5rem; display: flex; flex-direction: column; }
+  .contact .sec-label { color: color-mix(in srgb, var(--bg) 70%, var(--ink)); }
+  .contact :global(.contact-sig) { color: color-mix(in srgb, var(--bg) 45%, var(--ink)); margin: 1.25rem 0 auto; }
+  .say { font-family: var(--serif); font-size: 1.7rem; margin: 2rem 0 0.25rem; }
+  .say a { text-decoration: none; }
+  .contact .small { font-size: 0.85rem; margin: 0; color: color-mix(in srgb, var(--bg) 75%, var(--ink)); }
+  .contact a:hover { color: var(--accent); }
+
+  @media (max-width: 820px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .featured { grid-template-columns: 1fr; }
+    .featured :global(.art) { aspect-ratio: 2 / 1; min-height: 0; }
+    .bg-wrap { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .intro { grid-template-columns: 1fr; padding: 1.5rem; }
+    .intro-photo { order: -1; width: 6rem; height: 6rem; border-radius: 50%; }
+    .grid, .grid.two { grid-template-columns: 1fr; }
+    .tr { grid-template-columns: 1fr; gap: 0.2rem; }
+    .sec-label { display: none; }
+    .contact .sec-label { display: block; }
+  }
 </style>
