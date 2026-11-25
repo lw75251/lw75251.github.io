@@ -8,16 +8,25 @@ const drafts = import.meta.env.DEV ? [] : await getDrafts();
 
 const work = [
   {
-    where: 'Replit',
-    what: 'Founding data team. Built the agent-first analytics tool most of the company now asks its questions to, and owned the billing and product data underneath it.',
+    company: 'Replit',
+    href: 'https://replit.com',
+    title: 'Founding Member of Technical Staff, Data',
+    years: '2025 – now',
+    what: 'Agent-first analytics, and the billing and product data underneath it.',
   },
   {
-    where: 'Replit',
-    what: 'Read what new users actually typed first, and found that a lot of them wanted a conversation, not an app. The product changed because of it.',
+    company: 'Indeed',
+    href: 'https://www.indeed.com',
+    title: 'Senior Data Scientist',
+    years: '2021 – 2025',
+    what: 'Revenue forecasting, a self-serve ML platform, and an early Text-to-SQL assistant.',
   },
   {
-    where: 'Indeed',
-    what: 'Prototyped a Text-to-SQL assistant in early 2023, before that was a category, then a self-serve forecasting app that teams used to build thousands of models.',
+    company: 'Rauxa (Publicis Groupe)',
+    href: 'https://www.rauxa.com',
+    title: 'Data Scientist',
+    years: '2020 – 2021',
+    what: 'Marketing analytics, A/B testing, and data apps for agency clients.',
   },
 ];
 
@@ -68,10 +77,16 @@ const built = [
   </section>
 
   <section aria-labelledby="work">
-    <p class="kicker" id="work">Selected work</p>
-    <ul class="work">
+    <p class="kicker" id="work">Work</p>
+    <ul class="entries jobs">
       {work.map((w) => (
-        <li><span class="where">{w.where}</span><p>{w.what}</p></li>
+        <li>
+          <div class="row">
+            <span class="title"><a href={w.href} class="co">{w.company}</a> <span class="role">{w.title}</span></span>
+            <span class="meta">{w.years}</span>
+            <span class="desc">{w.what}</span>
+          </div>
+        </li>
       ))}
     </ul>
   </section>
@@ -105,5 +120,8 @@ const built = [
   .bio { margin: 1.5rem 0 0; max-width: 34rem; }
   .on-desk { margin: 1.25rem 0 0; font-size: 0.95rem; }
   .on-desk em { font-family: var(--serif); font-size: 1.05rem; }
+  .jobs .co { display: inline; padding: 0; text-decoration: none; }
+  .jobs .role { font-family: var(--sans); font-size: 0.92rem; color: var(--muted); margin-left: 0.4rem; }
+  @media (max-width: 560px) { .jobs .role { display: block; margin: 0.15rem 0 0; } }
   .kicker.inline { display: inline; margin-right: 0.6rem; }
 </style>
