@@ -3,9 +3,9 @@ import { FORECASTS } from './data/forecasts';
 
 export const SITE = {
   name: 'Leon Wu',
-  title: 'Leon Wu · Data & AI engineer',
+  title: 'Leon Wu · Data Scientist',
   description:
-    'Leon Wu builds AI analysts and the data systems under them. Founding data scientist at Replit; previously Text-to-SQL and forecasting at Indeed.',
+    'Leon Wu is a data scientist working on product analytics, growth and monetization at Replit, who also builds AI tools for data. Previously finance data science at Indeed.',
   email: 'lw75251@gmail.com',
   github: 'https://github.com/lw75251',
   linkedin: 'https://www.linkedin.com/in/aleonwu/',

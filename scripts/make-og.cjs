@@ -22,8 +22,8 @@ body { margin: 0; width: 1200px; height: 630px; background: #f7f5f0; color: #1c1
 svg { width: 100%; height: auto; margin-top: auto; color: #9b978e; }
 .signal-dot { fill: #b83c0a } .signal-ring { fill: none; stroke: #b83c0a; opacity: .35 }
 </style></head><body><div class="c">
-<div class="n">Leon Wu</div><div class="k">Agents · evals · data infrastructure</div>
-<div class="l">I build agents that answer data questions <em>correctly</em>, and the semantic layers and evals that keep them honest.</div>
+<div class="n">Leon Wu</div><div class="k">Product · growth · revenue · AI for data</div>
+<div class="l">I find the numbers that change what a company builds and how it charges, then build <em>AI tools</em> so everyone else can find their own.</div>
 ${signal.replace(/class="[^"]*"/, '')}
 </div></body></html>`;
 
