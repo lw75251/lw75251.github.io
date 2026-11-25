@@ -23,8 +23,6 @@ const showWriting = (await hasPublishedWriting()) || import.meta.env.DEV;
 const nav = [
   ...(showWriting ? [{ href: '/writing', label: 'Writing' }] : []),
   ...(hasForecasts() || import.meta.env.DEV ? [{ href: '/forecasts', label: 'Forecasts' }] : []),
-  { href: '/about', label: 'About' },
-  { href: '/now', label: 'Now' },
 ];
 
 const person = {
@@ -86,7 +84,7 @@ const person = {
       <slot />
     </main>
     <footer class:list={['site-footer wrap', { wide }]}>
-      <span>Leon Wu · New York</span>
+      <span>Leon Wu · Bay Area</span>
       {!quietFooter && <span class="links">
         <a href={`mailto:${SITE.email}`}>Email</a>
         <a href={SITE.linkedin}>LinkedIn</a>
