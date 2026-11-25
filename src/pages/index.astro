@@ -6,65 +6,98 @@ import { SITE, RESUME_MAILTO, getWriting, formatDate } from '../site';
 
 const writing = (await getWriting()).slice(0, 4);
 
-type Ship = {
+type Point = {
   where: string;
   title: string;
-  what: string;
+  q: string;
+  found: string;
+  effect: string;
+  stat: string;
+  basis: string;
   art: 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
 };
 
-const featured: Ship = {
+const featured: Point = {
   where: 'Replit · AI for data',
   title: 'Oracle',
-  what: 'I engineered and led Replit’s internal analytics agent: ask a question in plain English and it answers from the warehouse, through a semantic layer the whole company agrees on, showing the metric and SQL behind every number. Over half the company uses it every week, and it replaced Hex and Amplitude, saving seven figures a year.',
+  q: 'Why should every data question need an analyst?',
+  found: 'It shouldn’t, if the agent sits on a semantic layer the whole company agrees on and shows the metric and SQL behind every number. I engineered and led it.',
+  effect: 'Over half the company asks it questions every week. It replaced Hex and Amplitude.',
+  stat: '7 figures saved / yr',
+  basis: '>50% of company weekly',
   art: 'agent',
 };
 
-const ships: Ship[] = [
+const points: Point[] = [
   {
     where: 'Replit · Product research',
     title: 'What new users actually wanted',
-    what: 'An LLM classifier, checked against human labels, read new users’ first messages. A large share wanted a conversation, not an app, and Replit rebuilt its product around conversation.',
+    q: 'Who are our new users, really?',
+    found: 'An LLM classifier read their first messages: a large share wanted a conversation, not an app.',
+    effect: 'Replit rebuilt its product around conversation.',
+    stat: 'calibrated',
+    basis: 'against human labels',
     art: 'classifier',
   },
   {
     where: 'Replit · Monetization',
     title: 'Pro upgrade prompt',
-    what: 'Found the usage level where free users start to look like Pro users, and put an upgrade prompt exactly there. Pro conversions rose several-fold.',
+    q: 'When is a free user ready for Pro?',
+    found: 'At a usage level where free users start to look like Pro users.',
+    effect: 'An upgrade prompt placed exactly there.',
+    stat: '↑ several-fold',
+    basis: 'Pro conversions',
     art: 'threshold',
   },
   {
     where: 'Replit · Finance',
     title: 'One ARR',
-    what: 'Defined ARR and the revenue metrics built on it, and kept them consistent through two fundraises.',
+    q: 'What is our revenue, exactly?',
+    found: 'With credits, trials and usage pricing, ARR is a policy decision, not arithmetic.',
+    effect: 'One definition, and the revenue metrics built on it.',
+    stat: 'consistent',
+    basis: 'through two fundraises',
     art: 'metric',
   },
   {
     where: 'Replit · Sales',
     title: 'Product-qualified leads',
-    what: 'Scored accounts on product usage and enriched them from third-party sources in a waterfall. It became the main source of enterprise pipeline.',
+    q: 'Which accounts are ready for sales?',
+    found: 'The ones whose product usage says so, enriched from third-party sources in a waterfall.',
+    effect: 'A lead score sales actually works from.',
+    stat: 'main source',
+    basis: 'of enterprise pipeline',
     art: 'leads',
   },
   {
     where: 'Indeed · AI for data',
     title: 'Text-to-SQL assistant',
-    what: 'Prototyped on OpenAI’s API in January 2023. It grew into a 10-person team and 2,000+ weekly users, including senior leadership.',
+    q: 'Can non-technical people query data themselves?',
+    found: 'Yes, once the business rules are standardized. Prototyped on OpenAI’s API in January 2023.',
+    effect: 'It grew into a 10-person team.',
+    stat: '2,000+',
+    basis: 'weekly users, incl. leadership',
     art: 'sql',
   },
   {
     where: 'Indeed · Forecasting',
     title: 'Self-serve forecasting',
-    what: 'A forecasting app on SageMaker and MLflow. 20+ teams used it to build and manage 2,000+ models.',
+    q: 'Why should every team wait on finance for a forecast?',
+    found: 'Most forecasts follow the same few patterns, so make them self-serve.',
+    effect: 'A forecasting app on SageMaker and MLflow.',
+    stat: '2,000+ models',
+    basis: 'built by 20+ teams',
     art: 'forecast',
   },
 ];
 
-const background = [
-  { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.' },
-  { org: 'Indeed', role: 'Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
-  { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
+const lineage = [
   { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
+  { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
+  { org: 'Indeed', role: 'Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
+  { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.' },
 ];
+const nodeX = (i: number) => 60 + i * 160;
 ---
 <Base wide quietFooter>
   <section class="intro card" aria-labelledby="name">
@@ -89,10 +122,10 @@ const background = [
     </figure>
   </section>
 
-  <section id="shipped" aria-labelledby="shipped-h">
+  <section id="changepoints" aria-labelledby="cp-h">
     <header class="sec-head">
-      <h2 id="shipped-h">Shipped</h2>
-      <span class="sec-label">What I built</span>
+      <h2 id="cp-h">Changepoints</h2>
+      <span class="sec-label">Where the line moved</span>
     </header>
 
     <article class="card featured">
@@ -100,18 +133,28 @@ const background = [
       <div class="body">
         <p class="where">{featured.where}</p>
         <h3>{featured.title}</h3>
-        <p class="what">{featured.what}</p>
+        <dl class="qfe">
+          <dt>Q</dt><dd class="q">{featured.q}</dd>
+          <dt>Found</dt><dd>{featured.found}</dd>
+          <dt>Effect</dt><dd>{featured.effect}</dd>
+        </dl>
+        <p class="stat"><span class="dotmark" aria-hidden="true"></span><strong>{featured.stat}</strong> <span>{featured.basis}</span></p>
       </div>
     </article>
 
     <div class="grid">
-      {ships.map((s) => (
-        <article class="card">
-          <ShipArt kind={s.art} label={`Illustration for ${s.title}`} />
+      {points.map((p) => (
+        <article class="card point">
+          <ShipArt kind={p.art} label={`Illustration for ${p.title}`} />
           <div class="body">
-            <p class="where">{s.where}</p>
-            <h3>{s.title}</h3>
-            <p class="what">{s.what}</p>
+            <p class="where">{p.where}</p>
+            <h3>{p.title}</h3>
+            <dl class="qfe">
+              <dt>Q</dt><dd class="q">{p.q}</dd>
+              <dt>Found</dt><dd>{p.found}</dd>
+              <dt>Effect</dt><dd>{p.effect}</dd>
+            </dl>
+            <p class="stat"><span class="dotmark" aria-hidden="true"></span><strong>{p.stat}</strong> <span>{p.basis}</span></p>
           </div>
         </article>
       ))}
@@ -137,14 +180,25 @@ const background = [
     </section>
   )}
 
-  <section id="background" aria-labelledby="background-h">
+  <section id="lineage" aria-labelledby="lineage-h">
     <header class="sec-head">
-      <h2 id="background-h">Background</h2>
-      <span class="sec-label">Career & education</span>
+      <h2 id="lineage-h">Lineage</h2>
+      <span class="sec-label">Upstream of where I am now</span>
     </header>
-    <div class="bg-wrap">
+    <div class="lin-wrap">
       <div class="card table">
-        {background.map((b) => (
+        <svg class="lin-graph" viewBox="0 0 600 56" role="img" aria-label="Career lineage: UC San Diego, then Rauxa, then Indeed, then Replit">
+          {lineage.slice(0, -1).map((_, i) => (
+            <path d={`M${nodeX(i) + 52} 28 C${nodeX(i) + 80} 28 ${nodeX(i + 1) - 80} 28 ${nodeX(i + 1) - 52} 28`} class={i === lineage.length - 2 ? 'e eA' : 'e'} />
+          ))}
+          {lineage.map((l, i) => (
+            <>
+              <rect x={nodeX(i) - 52} y="14" width="104" height="28" rx="7" class={i === lineage.length - 1 ? 'n nA' : 'n'} />
+              <text x={nodeX(i)} y="32" text-anchor="middle" class={i === lineage.length - 1 ? 't tA' : 't'}>{l.org}</text>
+            </>
+          ))}
+        </svg>
+        {[...lineage].reverse().map((b) => (
           <div class="tr">
             <span class="org">{b.org}</span>
             <span><span class="r">{b.role}</span><span class="w">{b.what}</span></span>
@@ -153,11 +207,13 @@ const background = [
       </div>
       <div class="card contact">
         <p class="sec-label">Contact</p>
-        <p class="say"><a href={`mailto:${SITE.email}`}>Say hello ↗</a></p>
+        <p class="say"><a href={`mailto:${SITE.email}`}>Have a question worth asking? ↗</a></p>
         <p class="small">{SITE.email}<br /><a href={SITE.linkedin}>LinkedIn</a> · <a href={RESUME_MAILTO}>Resume on request</a></p>
       </div>
     </div>
   </section>
+
+  <p class="colophon">Charts on this page are illustrations, not real data. Real numbers on request.</p>
 </Base>
 
 <style>
@@ -184,16 +240,28 @@ const background = [
   a.sec-label { text-decoration: none; }
 
   /* Cards */
-  .body, .post { padding: 1.1rem 1.25rem 1.3rem; }
+  .body, .post { padding: 1.1rem 1.25rem 1.2rem; }
+  .point { display: flex; flex-direction: column; }
+  .point .body { display: flex; flex-direction: column; flex: 1; }
   .where { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.45rem; }
   .card h3 { font-size: 1.2rem; }
   .what { font-size: 0.9rem; color: var(--muted); margin: 0.5rem 0 0; line-height: 1.55; }
 
+  .qfe { display: grid; grid-template-columns: 3.4rem 1fr; gap: 0.35rem 0.6rem; margin: 0.75rem 0 0; font-size: 0.88rem; line-height: 1.5; }
+  .qfe dt { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 0.2rem; }
+  .qfe dd { margin: 0; color: var(--muted); }
+  .qfe dd.q { color: var(--ink); font-family: var(--serif); font-style: italic; font-size: 0.98rem; }
+
+  .stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.15rem 0.5rem; margin: auto 0 0; padding-top: 0.9rem; margin-top: 0.9rem; border-top: 1px dashed var(--rule); font-size: 0.82rem; color: var(--muted); }
+  .stat strong { font-family: var(--mono); font-weight: 600; font-size: 0.85rem; color: var(--accent); }
+  .dotmark { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); align-self: center; }
+
   .featured { display: grid; grid-template-columns: 1.35fr 1fr; margin-bottom: 1rem; }
   .featured :global(.art) { height: 100%; aspect-ratio: auto; min-height: 15rem; }
-  .featured .body { padding: 1.75rem; display: flex; flex-direction: column; justify-content: center; }
+  .featured .body { padding: 1.6rem 1.75rem; display: flex; flex-direction: column; justify-content: center; }
   .featured h3 { font-size: 1.8rem; }
-  .featured .what { font-size: 0.98rem; }
+  .featured .qfe { font-size: 0.94rem; }
+  .featured .stat { margin-top: 1.1rem; }
 
   .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
   .grid.two { grid-template-columns: repeat(2, 1fr); }
@@ -201,9 +269,16 @@ const background = [
   .post:hover h3 { color: var(--accent); }
   .post :global(.signal) { margin-bottom: 1rem; }
 
-  /* Background */
-  .bg-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; align-items: start; }
-  .table { padding: 0.4rem 1.5rem; }
+  /* Lineage */
+  .lin-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; align-items: start; }
+  .table { padding: 1.1rem 1.5rem 0.4rem; }
+  .lin-graph { display: block; width: 100%; height: auto; margin-bottom: 0.4rem; }
+  .lin-graph .e { fill: none; stroke: var(--line); stroke-width: 1.5; }
+  .lin-graph .eA { stroke: var(--accent); stroke-width: 2; }
+  .lin-graph .n { fill: var(--bg); stroke: var(--line); }
+  .lin-graph .nA { fill: var(--accent); stroke: var(--accent); }
+  .lin-graph .t { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11.5px; fill: var(--ink); }
+  .lin-graph .tA { fill: var(--bg); font-weight: 600; }
   .tr { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
   .tr:last-child { border-bottom: 0; }
   .org { font-family: var(--serif); font-size: 1.1rem; }
@@ -211,18 +286,20 @@ const background = [
   .w { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
   .contact { background: #1c1b19; color: #ebe8e1; border-color: #1c1b19; padding: 1.5rem; }
   .contact .sec-label { color: #a3a097; }
-  .say { font-family: var(--serif); font-size: 1.7rem; margin: 1.25rem 0 0.4rem; }
+  .say { font-family: var(--serif); font-size: 1.5rem; line-height: 1.25; margin: 1.1rem 0 0.6rem; }
   .say a { text-decoration: none; }
   .contact .small { font-size: 0.85rem; margin: 0; color: #c9c5bc; line-height: 1.7; }
   .contact a { text-decoration-color: #77746c; }
   @media (prefers-color-scheme: dark) { .contact { background: var(--surface); border-color: var(--rule); } }
   .contact a:hover { color: var(--accent); }
 
+  .colophon { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin: 3rem 0 0; }
+
   @media (max-width: 820px) {
     .grid { grid-template-columns: repeat(2, 1fr); }
     .featured { grid-template-columns: 1fr; }
     .featured :global(.art) { aspect-ratio: 2 / 1; min-height: 0; }
-    .bg-wrap { grid-template-columns: 1fr; }
+    .lin-wrap { grid-template-columns: 1fr; }
   }
   @media (max-width: 560px) {
     .intro { grid-template-columns: 1fr; padding: 1.5rem; }
@@ -232,5 +309,6 @@ const background = [
     .tr { grid-template-columns: 1fr; gap: 0.2rem; }
     .sec-label { display: none; }
     .contact .sec-label { display: block; }
+    .lin-graph .t { font-size: 13px; }
   }
 </style>
