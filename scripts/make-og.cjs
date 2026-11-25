@@ -19,7 +19,7 @@ body { margin: 0; width: 1200px; height: 630px; background: #f7f5f0; color: #1c1
 .l em { color: #b83c0a; }
 </style></head><body><div class="c">
 <div class="n"><svg width="34" height="34" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#b83c0a" stroke-width="1.5" opacity="0.45"/><circle cx="10" cy="10" r="4" fill="#b83c0a"/></svg><span>Leon Wu</span></div><div class="k">Staff Data Scientist · Early Replit</div>
-<div class="l">I scaled <em>Oracle</em>, Replit's internal analytics agent, to over half the company, every week.</div>
+<div class="l">I rebuilt and scaled <em>Oracle</em>, Replit's internal analytics agent, to over half the company.</div>
 </div></body></html>`;
 
 (async () => {
