@@ -4,7 +4,9 @@ import Signal from '../components/Signal.astro';
 import ShipArt from '../components/ShipArt.astro';
 import { SITE, RESUME_MAILTO, getWriting, formatDate } from '../site';
 
-const writing = (await getWriting()).slice(0, 4);
+const allWriting = await getWriting();
+const writing = allWriting.slice(0, 4);
+const published = new Set(allWriting.map((p) => p.id));
 
 type Point = {
   where: string;
@@ -14,17 +16,23 @@ type Point = {
   effect: string;
   stat: string;
   basis: string;
+  how: string;
+  stack: string;
+  essay?: string;
   art: 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
 };
 
 const featured: Point = {
   where: 'Replit · AI for data',
   title: 'Oracle',
-  q: 'Why should every data question need an analyst?',
-  found: 'It shouldn’t, if the agent sits on a semantic layer the whole company agrees on and shows the metric and SQL behind every number. I engineered and led it.',
-  effect: 'Over half the company asks it questions every week. It replaced Hex and Amplitude.',
-  stat: '7 figures saved / yr',
-  basis: '>50% of company weekly',
+  q: 'What would let most of the company answer its own data questions?',
+  found: 'An agent restricted to a semantic layer everyone agrees on, that shows the metric and SQL behind every number.',
+  effect: 'I engineered and led it. It replaced Hex and Amplitude, saving seven figures a year.',
+  stat: '>50% of company',
+  basis: 'uses it every week',
+  how: 'Agent harness in Python and TypeScript over the semantic layer; answers cite the governed metric and the query.',
+  stack: 'Python · TypeScript · semantic layer · dbt',
+  essay: 'definitions-not-models',
   art: 'agent',
 };
 
@@ -32,21 +40,27 @@ const points: Point[] = [
   {
     where: 'Replit · Product research',
     title: 'What new users actually wanted',
-    q: 'Who are our new users, really?',
-    found: 'An LLM classifier read their first messages: a large share wanted a conversation, not an app.',
+    q: 'What do new users ask for first?',
+    found: 'A large share wanted a conversation, not an app.',
     effect: 'Replit rebuilt its product around conversation.',
-    stat: 'calibrated',
-    basis: 'against human labels',
+    stat: 'product rebuilt',
+    basis: 'around conversation',
+    how: 'An LLM pipeline classified first messages, tuned against human-labeled evals before it touched the full dataset.',
+    stack: 'LLM pipeline · human-labeled evals · Python',
+    essay: 'they-wanted-a-conversation',
     art: 'classifier',
   },
   {
     where: 'Replit · Monetization',
     title: 'Pro upgrade prompt',
-    q: 'When is a free user ready for Pro?',
-    found: 'At a usage level where free users start to look like Pro users.',
-    effect: 'An upgrade prompt placed exactly there.',
-    stat: '↑ several-fold',
-    basis: 'Pro conversions',
+    q: 'When is a free user worth asking to upgrade?',
+    found: 'Past one usage level, free users start converting like Pro users.',
+    effect: 'An in-product upgrade prompt that fires at that level.',
+    stat: '5x',
+    basis: 'Pro conversions, A/B tested',
+    how: 'Found the threshold in usage data, then A/B tested the prompt. Also tested Agent pricing across credit exhaustion, trials and model mix.',
+    stack: 'Experimentation · SQL · Python',
+    essay: 'the-threshold',
     art: 'threshold',
   },
   {
@@ -54,39 +68,48 @@ const points: Point[] = [
     title: 'One ARR',
     q: 'What is our revenue, exactly?',
     found: 'With credits, trials and usage pricing, ARR is a policy decision, not arithmetic.',
-    effect: 'One definition, and the revenue metrics built on it.',
-    stat: 'consistent',
+    effect: 'One definition, and the revenue and investor metrics built on it.',
+    stat: 'one ARR',
     basis: 'through two fundraises',
+    how: 'Defined once in the billing and product data stack I own end to end, from event instrumentation through dbt to reporting.',
+    stack: 'dbt · SQL · billing data',
+    essay: 'one-arr',
     art: 'metric',
   },
   {
     where: 'Replit · Sales',
     title: 'Product-qualified leads',
     q: 'Which accounts are ready for sales?',
-    found: 'The ones whose product usage says so, enriched from third-party sources in a waterfall.',
-    effect: 'A lead score sales actually works from.',
-    stat: 'main source',
+    found: 'Product usage signals readiness, once it’s tied to the company behind it.',
+    effect: 'A lead score with waterfall enrichment from third-party sources.',
+    stat: '~65%',
     basis: 'of enterprise pipeline',
+    how: 'Scored accounts on product usage, then filled in company data from several third-party sources in a waterfall.',
+    stack: 'SQL · Python · third-party enrichment',
     art: 'leads',
   },
   {
     where: 'Indeed · AI for data',
     title: 'Text-to-SQL assistant',
     q: 'Can non-technical people query data themselves?',
-    found: 'Yes, once the business rules are standardized. Prototyped on OpenAI’s API in January 2023.',
-    effect: 'It grew into a 10-person team.',
+    found: 'Yes, once the business rules are standardized across orgs.',
+    effect: 'Prototyped on OpenAI’s API in January 2023. It grew into a 10-person team.',
     stat: '2,000+',
     basis: 'weekly users, incl. leadership',
+    how: 'Led system design, development and demos; the hard part was agreeing on business rules, not generating SQL.',
+    stack: 'OpenAI API · agents · RAG · SQL',
     art: 'sql',
   },
   {
     where: 'Indeed · Forecasting',
     title: 'Self-serve forecasting',
-    q: 'Why should every team wait on finance for a forecast?',
-    found: 'Most forecasts follow the same few patterns, so make them self-serve.',
-    effect: 'A forecasting app on SageMaker and MLflow.',
+    q: 'Could every team build its own forecasts?',
+    found: 'Yes, with one shared pipeline handling tuning, caching and monitoring.',
+    effect: 'A self-serve forecasting app on SageMaker and MLflow.',
     stat: '2,000+ models',
     basis: 'built by 20+ teams',
+    how: 'ML pipelines on SageMaker with MLflow monitoring and hyperparameter tuning built in.',
+    stack: 'Python · Prophet · SageMaker · MLflow',
     art: 'forecast',
   },
 ];
@@ -124,8 +147,10 @@ const nodeX = (i: number) => 60 + i * 160;
 
   <section id="changepoints" aria-labelledby="cp-h">
     <header class="sec-head">
-      <h2 id="cp-h">Changepoints</h2>
-      <span class="sec-label">Where the line moved</span>
+      <div>
+        <h2 id="cp-h">Changepoints</h2>
+        <p class="sub">Where the line moved because of something I built. Click a card for how I knew.</p>
+      </div>
     </header>
 
     <article class="card featured">
@@ -137,26 +162,39 @@ const nodeX = (i: number) => 60 + i * 160;
           <dt>Q</dt><dd class="q">{featured.q}</dd>
           <dt>Found</dt><dd>{featured.found}</dd>
           <dt>Effect</dt><dd>{featured.effect}</dd>
+          <dt>How</dt><dd>{featured.how}</dd>
         </dl>
+        <p class="stack">{featured.stack}</p>
+        {featured.essay && published.has(featured.essay) && <p class="read"><a href={`/writing/${featured.essay}/`}>Read the full story →</a></p>}
         <p class="stat"><span class="dotmark" aria-hidden="true"></span><strong>{featured.stat}</strong> <span>{featured.basis}</span></p>
       </div>
     </article>
 
-    <div class="grid">
+    <div class="grid cps">
       {points.map((p) => (
-        <article class="card point">
-          <ShipArt kind={p.art} label={`Illustration for ${p.title}`} />
-          <div class="body">
-            <p class="where">{p.where}</p>
-            <h3>{p.title}</h3>
+        <details class="card point" name="changepoint">
+          <summary>
+            <ShipArt kind={p.art} label={`Illustration for ${p.title}`} />
+            <div class="body">
+              <p class="where">{p.where}</p>
+              <h3>{p.title}</h3>
+              <p class="q">{p.q}</p>
+              <p class="stat">
+                <span class="dotmark" aria-hidden="true"></span><strong>{p.stat}</strong> <span>{p.basis}</span>
+                <span class="toggle" aria-hidden="true"></span>
+              </p>
+            </div>
+          </summary>
+          <div class="more">
             <dl class="qfe">
-              <dt>Q</dt><dd class="q">{p.q}</dd>
               <dt>Found</dt><dd>{p.found}</dd>
               <dt>Effect</dt><dd>{p.effect}</dd>
+              <dt>How</dt><dd>{p.how}</dd>
             </dl>
-            <p class="stat"><span class="dotmark" aria-hidden="true"></span><strong>{p.stat}</strong> <span>{p.basis}</span></p>
+            <p class="stack">{p.stack}</p>
+            {p.essay && published.has(p.essay) && <p class="read"><a href={`/writing/${p.essay}/`}>Read the full story →</a></p>}
           </div>
-        </article>
+        </details>
       ))}
     </div>
   </section>
@@ -198,7 +236,7 @@ const nodeX = (i: number) => 60 + i * 160;
             </>
           ))}
         </svg>
-        {[...lineage].reverse().map((b) => (
+        {lineage.map((b) => (
           <div class="tr">
             <span class="org">{b.org}</span>
             <span><span class="r">{b.role}</span><span class="w">{b.what}</span></span>
@@ -213,7 +251,7 @@ const nodeX = (i: number) => 60 + i * 160;
     </div>
   </section>
 
-  <p class="colophon">Charts on this page are illustrations, not real data. Real numbers on request.</p>
+  <p class="colophon">Charts on this page are illustrations. The numbers in the text are real.</p>
 </Base>
 
 <style>
@@ -239,10 +277,25 @@ const nodeX = (i: number) => 60 + i * 160;
   .sec-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
   a.sec-label { text-decoration: none; }
 
+  .sub { font-size: 0.92rem; color: var(--muted); margin: 0.35rem 0 0; }
+
   /* Cards */
   .body, .post { padding: 1.1rem 1.25rem 1.2rem; }
-  .point { display: flex; flex-direction: column; }
-  .point .body { display: flex; flex-direction: column; flex: 1; }
+  .cps { align-items: start; }
+  .point summary { list-style: none; cursor: pointer; display: block; }
+  .point summary::-webkit-details-marker { display: none; }
+  .point summary:hover h3 { color: var(--accent); }
+  .point summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 14px; }
+  .point .q { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--ink); margin: 0.4rem 0 0; }
+  .point .stat { margin-top: 0.9rem; }
+  .toggle { margin-left: auto; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .toggle::after { content: 'How I knew +'; }
+  .point[open] .toggle::after { content: 'Close −'; }
+  .point[open] { border-color: color-mix(in srgb, var(--accent) 40%, var(--rule)); }
+  .more { padding: 0 1.25rem 1.25rem; }
+  .more .qfe { margin-top: 0; }
+  .stack { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin: 0.8rem 0 0; }
+  .read { margin: 0.7rem 0 0; font-size: 0.88rem; }
   .where { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.45rem; }
   .card h3 { font-size: 1.2rem; }
   .what { font-size: 0.9rem; color: var(--muted); margin: 0.5rem 0 0; line-height: 1.55; }
@@ -252,7 +305,7 @@ const nodeX = (i: number) => 60 + i * 160;
   .qfe dd { margin: 0; color: var(--muted); }
   .qfe dd.q { color: var(--ink); font-family: var(--serif); font-style: italic; font-size: 0.98rem; }
 
-  .stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.15rem 0.5rem; margin: auto 0 0; padding-top: 0.9rem; margin-top: 0.9rem; border-top: 1px dashed var(--rule); font-size: 0.82rem; color: var(--muted); }
+  .stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.15rem 0.5rem; padding-top: 0.9rem; margin: 0.9rem 0 0; border-top: 1px dashed var(--rule); font-size: 0.82rem; color: var(--muted); }
   .stat strong { font-family: var(--mono); font-weight: 600; font-size: 0.85rem; color: var(--accent); }
   .dotmark { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); align-self: center; }
 
@@ -305,7 +358,8 @@ const nodeX = (i: number) => 60 + i * 160;
     .intro { grid-template-columns: 1fr; padding: 1.5rem; }
     .intro-photo { order: -1; width: 6rem; height: 6rem; border-radius: 50%; }
     .grid, .grid.two { grid-template-columns: 1fr; }
-    .grid .card :global(.art) { aspect-ratio: 5 / 2; }
+    .cps .card :global(.art) { display: none; }
+    .lin-graph { display: none; }
     .tr { grid-template-columns: 1fr; gap: 0.2rem; }
     .sec-label { display: none; }
     .contact .sec-label { display: block; }

@@ -4,7 +4,6 @@ import '@fontsource-variable/newsreader/opsz.css';
 import '@fontsource-variable/newsreader/opsz-italic.css';
 import '../styles/global.css';
 import { SITE, RESUME_MAILTO, hasPublishedWriting, hasForecasts } from '../site';
-import Signal from '../components/Signal.astro';
 
 interface Props {
   title?: string;
@@ -71,7 +70,10 @@ const person = {
     <a class="skip" href="#main">Skip to content</a>
     <header class:list={['site-header wrap', { wide }]}>
       <a href="/" class="mark" aria-label="Leon Wu, home">
-        <Signal seed="leon" width={34} height={16} points={12} />
+        <svg class="mark-dot" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+          <circle cx="10" cy="10" r="8.5" class="ring" />
+          <circle cx="10" cy="10" r="4" class="dot" />
+        </svg>
         <span>Leon Wu</span>
       </a>
       <nav aria-label="Main">
