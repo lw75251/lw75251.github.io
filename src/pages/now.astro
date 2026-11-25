@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Edit this page whenever things change. Bump the date when you do.
+const updated = 'November 2026';
+const now = [
+  { label: 'Working on', text: 'Making agents trustworthy analysts: better harnesses, a semantic layer they can lean on, and evals that catch confident wrong answers.' },
+  { label: 'Writing', text: 'The first essays for this site, starting with what we learned from reading new users’ first messages.' },
+  { label: 'Playing', text: 'Riftbound, League of Legends, and too many chess puzzles on my phone.' },
+  { label: 'Watching', text: 'Lakers, Man City and Broncos, with mixed emotional outcomes.' },
+];
+---
+<Base title="Now" description="What Leon Wu is focused on right now.">
+  <h1>Now</h1>
+  <p class="muted sub">
+    What I'm focused on right now. Updated {updated}. (This is a <a href="https://nownownow.com/about">now page</a>.)
+  </p>
+  <ul class="work">
+    {now.map((n) => (
+      <li><span class="where">{n.label}</span><p>{n.text}</p></li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .sub { margin: 1rem 0 2.5rem; }
+</style>

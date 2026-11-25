@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+import Signal from '../components/Signal.astro';
+import { SITE, getWriting, getDrafts, formatDate } from '../site';
+
+const writing = (await getWriting()).slice(0, 5);
+const drafts = import.meta.env.DEV ? [] : await getDrafts();
+
+const work = [
+  {
+    where: 'Replit',
+    what: 'Founding data team. Built the agent-first analytics tool most of the company now asks its questions to, and owned the billing and product data underneath it.',
+  },
+  {
+    where: 'Replit',
+    what: 'Read what new users actually typed first, and found that a lot of them wanted a conversation, not an app. The product changed because of it.',
+  },
+  {
+    where: 'Indeed',
+    what: 'Prototyped a Text-to-SQL assistant in early 2023, before that was a category, then a self-serve forecasting app that teams used to build thousands of models.',
+  },
+];
+
+const built = [
+  { name: 'AI Solution Explorer', href: 'https://github.com/lw75251/ai_solutions_generator', what: 'Generate solutions to hard problems, then weigh them by feasibility and risk.' },
+  { name: 'Quairy', href: 'https://github.com/lw75251/datasetai', what: 'My late-2023 Text-to-SQL demo: ReAct agents and vector search, pitched to small businesses.' },
+  { name: 'Spreadsheet Q&A', href: 'https://github.com/lw75251/datasetai', what: 'Ask plain-English questions of messy Excel files with several tables per sheet.' },
+  { name: 'Alfred', href: 'https://github.com/lw75251/frontend_alfred', what: 'QR-code ordering for restaurants, built in Flutter before it was everywhere in the US.' },
+];
+---
+<Base>
+  <section class="intro">
+    <p class="kicker">Data · statistics · agents</p>
+    <p class="lede">
+      I look for the <em>one number</em> that changes the plan, then build the tools so everyone else can find theirs.
+    </p>
+    <p class="muted bio">
+      I'm Leon. I'm on the founding data team at Replit. Before that I spent years at Indeed forecasting revenue and
+      building early LLM tools for data. I studied probability and statistics, and I can't stop building things. I live in New York.
+    </p>
+  </section>
+
+  <section aria-labelledby="writing">
+    <p class="kicker" id="writing">Writing</p>
+    {writing.length > 0 ? (
+      <ul class="entries">
+        {writing.map((p) => (
+          <li>
+            <a href={`/writing/${p.id}/`}>
+              <span class="sig">
+                <Signal seed={p.id} />
+                <span class="title">{p.data.title}</span>
+              </span>
+              <span class="meta">{formatDate(p.data.date)}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="muted">The first essays are being written.</p>
+    )}
+    {drafts.length > 0 && (
+      <p class="muted on-desk">
+        <span class="kicker inline">On the desk</span>
+        {drafts.map((d, i) => <>{i > 0 && ' · '}<em>{d.data.title}</em></>)}
+      </p>
+    )}
+  </section>
+
+  <section aria-labelledby="work">
+    <p class="kicker" id="work">Selected work</p>
+    <ul class="work">
+      {work.map((w) => (
+        <li><span class="where">{w.where}</span><p>{w.what}</p></li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="built">
+    <p class="kicker" id="built">Built on the side</p>
+    <ul class="entries">
+      {built.map((b) => (
+        <li>
+          <a href={b.href}>
+            <span class="title">{b.name}</span>
+            <span class="meta">GitHub ↗</span>
+            <span class="desc">{b.what}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="hello">
+    <p class="kicker" id="hello">Say hello</p>
+    <p>
+      I'm happy to talk about data, evals, agent harnesses, or a good chess opening. You can reach me at{' '}
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or on <a href={SITE.linkedin}>LinkedIn</a>. My resume is available on request.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .intro .lede { max-width: 34rem; }
+  .bio { margin: 1.5rem 0 0; max-width: 34rem; }
+  .on-desk { margin: 1.25rem 0 0; font-size: 0.95rem; }
+  .on-desk em { font-family: var(--serif); font-size: 1.05rem; }
+  .kicker.inline { display: inline; margin-right: 0.6rem; }
+</style>

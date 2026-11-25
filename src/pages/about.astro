@@ -1,0 +1,62 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site';
+---
+<Base title="About" description="About Leon Wu: a statistician who builds tools.">
+  <div class="about">
+    <img src="/leon.jpg" alt="Leon Wu" width="667" height="1000" class="photo" />
+    <div>
+      <h1>About</h1>
+      <div class="prose">
+        <p>
+          I grew up in New Jersey, went west to UC San Diego, and came back to New York. I started out in
+          finance and business, found programming, and ended up with a degree in probability and statistics.
+          That combination still shapes how I work: I'm skeptical of a number until I know where it came from.
+        </p>
+        <p>
+          My career has followed one question: how do you get the right answer to the people who need it?
+          At an ad agency, the answer was dashboards and scrapers. At Indeed, it was forecasting models, then a
+          Text-to-SQL assistant I prototyped in early 2023 that grew into a real team. Now I'm on the founding data team at
+          Replit, where the answer is increasingly an agent that sits on top of a well-built semantic layer.
+        </p>
+        <p>
+          The work I'm proudest of rarely looks like a model. It's usually one well-framed question, a careful
+          look at what users are actually doing, and a tool that means nobody has to ask me again.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section aria-labelledby="off">
+    <p class="kicker" id="off">Off the clock</p>
+    <ul class="chips">
+      <li>♟ Chess</li>
+      <li>League of Legends</li>
+      <li>Riftbound</li>
+      <li>Guitar</li>
+      <li>Lakers</li>
+      <li>Man City</li>
+      <li>Broncos (let's ride)</li>
+      <li>Trying every new dev tool the week it ships</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="contact">
+    <p class="kicker" id="contact">Contact</p>
+    <p>
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · <a href={SITE.github}>GitHub</a>{' · '}<a href={SITE.linkedin}>LinkedIn</a>. My resume is available on request.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .about + section { margin-top: 4.5rem; }
+  .about { display: grid; grid-template-columns: 9rem 1fr; gap: 2rem; align-items: start; }
+  .photo { width: 100%; height: auto; border-radius: 6px; filter: grayscale(0.15); }
+  .about h1 { margin-bottom: 1.5rem; }
+  .about .prose { font-size: 1.15rem; }
+  @media (max-width: 560px) {
+    .about { grid-template-columns: 1fr; }
+    .photo { width: 7rem; }
+  }
+</style>

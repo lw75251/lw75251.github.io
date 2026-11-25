@@ -1,0 +1,63 @@
+---
+/**
+ * The site's signature mark: a noisy series with one point that matters.
+ * Deterministic per `seed`, so every essay gets its own line that never changes.
+ */
+interface Props {
+  seed: string;
+  width?: number;
+  height?: number;
+  points?: number;
+  label?: string;
+}
+const { seed, width = 96, height = 24, points = 28, label } = Astro.props;
+
+function hash(s: string) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+function rng(a: number) {
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const rand = rng(hash(seed));
+// A quiet random walk, then one real shift somewhere in the back half.
+const shiftAt = Math.floor(points * (0.55 + rand() * 0.3));
+const ys: number[] = [];
+let level = 0;
+for (let i = 0; i < points; i++) {
+  level = level * 0.6 + (rand() - 0.5) * 0.8;
+  ys.push(level + (i >= shiftAt ? 1.6 : 0) + (rand() - 0.5) * 0.5);
+}
+const min = Math.min(...ys), max = Math.max(...ys);
+const pad = 3;
+const x = (i: number) => pad + (i / (points - 1)) * (width - pad * 2);
+const y = (v: number) => height - pad - ((v - min) / (max - min || 1)) * (height - pad * 2);
+const d = ys.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+const cx = x(shiftAt), cy = y(ys[shiftAt]);
+---
+<svg
+  class="signal"
+  viewBox={`0 0 ${width} ${height}`}
+  width={width}
+  height={height}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  <path d={d} fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx={cx} cy={cy} r="4.5" class="signal-ring" />
+  <circle cx={cx} cy={cy} r="2.25" class="signal-dot" />
+</svg>
+
+<style>
+  .signal { display: block; color: var(--faint); overflow: visible; }
+  .signal-dot { fill: var(--accent); }
+  .signal-ring { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0.35; }
+</style>
