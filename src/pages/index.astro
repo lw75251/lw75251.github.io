@@ -16,7 +16,7 @@ type Ship = {
 const featured: Ship = {
   where: 'Replit · AI for data',
   title: 'Oracle',
-  what: 'Replit’s internal AI data analyst. Ask a question in plain English and it answers from the warehouse, through a semantic layer the whole company agrees on. Over half the company uses it every week, and it replaced Hex and Amplitude, saving seven figures a year. I engineered and led it.',
+  what: 'I engineered and led Replit’s internal analytics agent: ask a question in plain English and it answers from the warehouse, through a semantic layer the whole company agrees on, showing the metric and SQL behind every number. Over half the company uses it every week, and it replaced Hex and Amplitude, saving seven figures a year.',
   art: 'agent',
 };
 
@@ -24,31 +24,31 @@ const ships: Ship[] = [
   {
     where: 'Replit · Product research',
     title: 'What new users actually wanted',
-    what: 'An LLM classifier, checked against human labels, read new users’ first messages. A large share wanted a conversation, not an app, and the product changed because of it.',
+    what: 'An LLM classifier, checked against human labels, read new users’ first messages. A large share wanted a conversation, not an app, and Replit rebuilt its product around conversation.',
     art: 'classifier',
   },
   {
     where: 'Replit · Monetization',
     title: 'Pro upgrade prompt',
-    what: 'Found the usage threshold that signals Pro fit, then shipped an in-product upgrade prompt at that moment. Conversions multiplied.',
+    what: 'Found the usage level where free users start to look like Pro users, and put an upgrade prompt exactly there. Pro conversions rose several-fold.',
     art: 'threshold',
   },
   {
     where: 'Replit · Finance',
     title: 'One ARR',
-    what: 'Standardized ARR and every revenue and investor metric, and kept them consistent through two fundraises.',
+    what: 'Defined ARR and the revenue metrics built on it, and kept them consistent through two fundraises.',
     art: 'metric',
   },
   {
     where: 'Replit · Sales',
     title: 'Product-qualified leads',
-    what: 'Lead scoring from product usage, plus waterfall enrichment from third-party data. It became the main source of enterprise pipeline.',
+    what: 'Scored accounts on product usage and enriched them from third-party sources in a waterfall. It became the main source of enterprise pipeline.',
     art: 'leads',
   },
   {
-    where: 'Indeed · January 2023',
+    where: 'Indeed · AI for data',
     title: 'Text-to-SQL assistant',
-    what: 'Prototyped before it was a category. It grew into a 10-person team and 2,000+ weekly users, including senior leadership.',
+    what: 'Prototyped on OpenAI’s API in January 2023. It grew into a 10-person team and 2,000+ weekly users, including senior leadership.',
     art: 'sql',
   },
   {
@@ -66,14 +66,14 @@ const background = [
   { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
 ];
 ---
-<Base wide>
+<Base wide quietFooter>
   <section class="intro card" aria-labelledby="name">
     <div class="intro-text">
       <h1 id="name">Leon Wu</h1>
-      <p class="role">Founding Member of Technical Staff, Data (Staff) @ Replit</p>
+      <p class="role">Founding Member of Technical Staff, Data (Staff) at Replit</p>
       <p class="hook">
-        Built <strong>Oracle</strong>, Replit’s AI data analyst. I also own growth, monetization and revenue analytics,
-        and the data stack underneath. Previously at Indeed.
+        Built <strong>Oracle</strong>, Replit’s internal analytics agent. I also own growth, monetization and revenue
+        analytics, and the data stack underneath. Previously at Indeed.
       </p>
       <p class="links">
         <a href={`mailto:${SITE.email}`}>Email</a>
@@ -83,13 +83,11 @@ const background = [
       </p>
     </div>
     <img src="/leon.jpg" alt="Portrait of Leon Wu" width="667" height="1000" class="intro-photo" />
+    <figure class="intro-sig">
+      <Signal seed="hero" width={640} height={56} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
+      <figcaption>A random walk with one real shift. Most of my job is finding the dot.</figcaption>
+    </figure>
   </section>
-
-  <nav class="chips" aria-label="Sections">
-    <a href="#shipped">Shipped</a>
-    {writing.length > 0 && <a href="#writing">Writing</a>}
-    <a href="#background">Background</a>
-  </nav>
 
   <section id="shipped" aria-labelledby="shipped-h">
     <header class="sec-head">
@@ -98,7 +96,7 @@ const background = [
     </header>
 
     <article class="card featured">
-      <ShipArt kind={featured.art} label="Illustration: a plain-English question answered with a chart" />
+      <ShipArt kind={featured.art} label="Illustration: a question answered with a chart, showing the metric and SQL behind it" />
       <div class="body">
         <p class="where">{featured.where}</p>
         <h3>{featured.title}</h3>
@@ -155,9 +153,8 @@ const background = [
       </div>
       <div class="card contact">
         <p class="sec-label">Contact</p>
-        <Signal seed="contact" width={160} height={34} points={30} class="contact-sig" />
         <p class="say"><a href={`mailto:${SITE.email}`}>Say hello ↗</a></p>
-        <p class="small">{SITE.email}<br />Resume <a href={RESUME_MAILTO}>on request</a></p>
+        <p class="small">{SITE.email}<br /><a href={SITE.linkedin}>LinkedIn</a> · <a href={RESUME_MAILTO}>Resume on request</a></p>
       </div>
     </div>
   </section>
@@ -168,7 +165,10 @@ const background = [
   .card { background: color-mix(in srgb, var(--surface) 55%, var(--bg)); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
 
   /* Intro */
-  .intro { display: grid; grid-template-columns: 1fr 10rem; gap: 2rem; padding: 2rem 2.25rem; align-items: center; }
+  .intro { display: grid; grid-template-columns: 1fr 10rem; gap: 2rem; padding: 2rem 2.25rem 1.5rem; align-items: center; }
+  .intro-sig { grid-column: 1 / -1; margin: 0.25rem 0 0; }
+  .intro :global(.hero-signal) { width: 100%; height: auto; color: var(--line); }
+  .intro-sig figcaption { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
   .intro h1 { font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem); }
   .role { font-size: 0.95rem; color: var(--muted); margin: 0.6rem 0 0; }
   .hook { margin: 0.4rem 0 0; max-width: 36rem; }
@@ -177,12 +177,7 @@ const background = [
   .links a { padding-block: 0.4rem; }
   .intro-photo { width: 10rem; height: 12rem; object-fit: cover; object-position: 50% 30%; border-radius: 10px; }
 
-  /* Section chips */
-  .chips { display: flex; justify-content: center; gap: 0.25rem; margin: 2rem auto 0; padding: 0.3rem; width: fit-content; border: 1px solid var(--rule); border-radius: 999px; font-size: 0.85rem; }
-  .chips a { text-decoration: none; padding: 0.45rem 0.95rem; border-radius: 999px; color: var(--muted); }
-  .chips a:hover { background: var(--surface); color: var(--ink); }
-
-  section + section, .chips + section { margin-top: 3.5rem; }
+  section + section { margin-top: 3.5rem; }
   .sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.1rem; }
   .sec-head h2 { font-size: 1.75rem; }
   .sec-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
@@ -207,19 +202,20 @@ const background = [
   .post :global(.signal) { margin-bottom: 1rem; }
 
   /* Background */
-  .bg-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; }
+  .bg-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; align-items: start; }
   .table { padding: 0.4rem 1.5rem; }
   .tr { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
   .tr:last-child { border-bottom: 0; }
   .org { font-family: var(--serif); font-size: 1.1rem; }
   .r { display: block; font-size: 0.92rem; }
   .w { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
-  .contact { background: var(--ink); color: var(--bg); border-color: var(--ink); padding: 1.5rem; display: flex; flex-direction: column; }
-  .contact .sec-label { color: color-mix(in srgb, var(--bg) 70%, var(--ink)); }
-  .contact :global(.contact-sig) { color: color-mix(in srgb, var(--bg) 45%, var(--ink)); margin: 1.25rem 0 auto; }
-  .say { font-family: var(--serif); font-size: 1.7rem; margin: 2rem 0 0.25rem; }
+  .contact { background: #1c1b19; color: #ebe8e1; border-color: #1c1b19; padding: 1.5rem; }
+  .contact .sec-label { color: #a3a097; }
+  .say { font-family: var(--serif); font-size: 1.7rem; margin: 1.25rem 0 0.4rem; }
   .say a { text-decoration: none; }
-  .contact .small { font-size: 0.85rem; margin: 0; color: color-mix(in srgb, var(--bg) 75%, var(--ink)); }
+  .contact .small { font-size: 0.85rem; margin: 0; color: #c9c5bc; line-height: 1.7; }
+  .contact a { text-decoration-color: #77746c; }
+  @media (prefers-color-scheme: dark) { .contact { background: var(--surface); border-color: var(--rule); } }
   .contact a:hover { color: var(--accent); }
 
   @media (max-width: 820px) {
@@ -232,6 +228,7 @@ const background = [
     .intro { grid-template-columns: 1fr; padding: 1.5rem; }
     .intro-photo { order: -1; width: 6rem; height: 6rem; border-radius: 50%; }
     .grid, .grid.two { grid-template-columns: 1fr; }
+    .grid .card :global(.art) { aspect-ratio: 5 / 2; }
     .tr { grid-template-columns: 1fr; gap: 0.2rem; }
     .sec-label { display: none; }
     .contact .sec-label { display: block; }

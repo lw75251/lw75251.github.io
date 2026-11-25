@@ -23,7 +23,7 @@ svg { width: 100%; height: auto; margin-top: auto; color: #9b978e; }
 .signal-dot { fill: #b83c0a } .signal-ring { fill: none; stroke: #b83c0a; opacity: .35 }
 </style></head><body><div class="c">
 <div class="n">Leon Wu</div><div class="k">Data science · data engineering · AI for data</div>
-<div class="l">I built <em>Oracle</em>, Replit's AI data analyst. Over half the company asks it questions every week.</div>
+<div class="l">I built <em>Oracle</em>, Replit's internal analytics agent. Over half the company asks it questions every week.</div>
 ${signal.replace(/class="[^"]*"/, '')}
 </div></body></html>`;
 

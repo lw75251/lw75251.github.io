@@ -1,7 +1,7 @@
 ---
 /**
- * Small generated data-visualizations used as card art for shipped work,
- * so the site needs no screenshots of internal tools. Deterministic per kind.
+ * Small generated illustrations used as card art for shipped work, so the
+ * site needs no screenshots of internal tools. Deterministic per kind.
  */
 type Kind = 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
 interface Props { kind: Kind; label: string }
@@ -20,33 +20,25 @@ const W = 400, H = 200;
 const r = rng(kind.length * 9973 + kind.charCodeAt(0));
 const path = (pts: [number, number][]) => pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
 
-// agent: a question, then a chart that answers it
-const agentLine = Array.from({ length: 24 }, (_, i) => [40 + i * 14, 150 - i * 2.2 - Math.sin(i / 2) * 8 - r() * 8] as [number, number]);
+// agent: weekly signups by source, stacked bars
+const weeks = Array.from({ length: 7 }, (_, i) => [28 + i * 3 + r() * 6, 18 + i * 2 + r() * 6, 10 + r() * 6]);
+const chips: { t: string; w: number; x: number }[] = [];
+for (const [t, w] of [['metric: signups', 114], ['excludes internal', 124], ['SQL ▸', 46]] as [string, number][]) {
+  const prev = chips[chips.length - 1];
+  chips.push({ t, w, x: prev ? prev.x + prev.w + 6 : 40 });
+}
 
-// classifier: two clusters and a boundary
-const dots = Array.from({ length: 70 }, (_, i) => {
-  const b = i % 4 === 0; // roughly a quarter in the second class
-  const cx = b ? 285 : 140, cy = b ? 80 : 115;
-  const a = r() * Math.PI * 2, d = Math.sqrt(r()) * (b ? 55 : 80);
-  return { x: cx + Math.cos(a) * d * 1.3, y: cy + Math.sin(a) * d * 0.7, b };
+// classifier: first messages sorted into two columns, one ambiguous
+const build = ['make a todo app', 'website for my bakery', 'clone a habit tracker'];
+const talk = ['explain this error', 'help me plan a trip', 'what is recursion?'];
+
+// threshold: conversion rate rises with usage; cutoff where it bends
+const usageBins = Array.from({ length: 16 }, (_, i) => 14 + 70 * Math.exp(-((i - 4) ** 2) / 12) + r() * 6);
+const conv = Array.from({ length: 41 }, (_, i) => {
+  const x = 30 + i * 8.5, t = (i - 20) / 3.5;
+  return [x, 160 - 115 / (1 + Math.exp(-t))] as [number, number];
 });
-
-// threshold: conversion vs usage, with a cutoff
-const sCurve = Array.from({ length: 41 }, (_, i) => {
-  const x = 30 + i * 8.5, t = (i - 22) / 4;
-  return [x, 165 - 120 / (1 + Math.exp(-t))] as [number, number];
-});
-const tx = 30 + 22 * 8.5;
-
-// metric: one consistent line through growth
-const metric = Array.from({ length: 30 }, (_, i) => [30 + i * 12, 170 - Math.pow(i / 29, 1.8) * 125 - (r() - 0.5) * 3] as [number, number]);
-
-// agent answer: bars
-const bars = [42, 55, 48, 61, 58, 74, 88];
-
-// threshold histogram: users by usage, threshold at bin 9
-const hist2 = Array.from({ length: 16 }, (_, i) => 18 + 110 * Math.exp(-((i - 5) ** 2) / 14) + r() * 8);
-const tBin = 9;
+const tx = 30 + 18 * 8.5;
 
 // lineage DAG
 const nodes = {
@@ -56,49 +48,66 @@ const nodes = {
 } as Record<string, [number, number, string, number]>;
 const edges = [['stripe', 'stg'], ['credits', 'stg'], ['credits', 'stg2'], ['usage', 'stg2'], ['stg', 'rev'], ['stg2', 'rev'], ['rev', 'arr']];
 
-// enrichment matrix: accounts x fields, filled progressively by sources
-const cols = 9, rows = 5;
-const cells = Array.from({ length: rows * cols }, (_, i) => {
-  const c = i % cols, row = Math.floor(i / cols);
-  const filled = c < 3 || r() < 0.75 - c * 0.04;
-  return { x: 60 + c * 34, y: 30 + row * 30, filled, enriched: filled && c >= 3, top: row === 1 };
-});
+// leads funnel
+const funnel = [['all accounts', 320], ['enriched', 250], ['product-qualified', 170], ['to sales', 100]] as [string, number][];
 
-// forecast: history, then an uncertainty fan
-const hist = Array.from({ length: 20 }, (_, i) => [30 + i * 11, 120 - i * 1.2 + Math.sin(i / 1.6) * 14 + (r() - 0.5) * 8] as [number, number]);
+// forecast: history, then an uncertainty fan that stays inside the frame
+const hist = Array.from({ length: 18 }, (_, i) => [30 + i * 12, 118 - i * 1.2 + Math.sin(i / 1.6) * 14 + (r() - 0.5) * 8] as [number, number]);
 const [lx, ly] = hist[hist.length - 1];
-const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1) * 1.5, (i + 1) * 3.2] as [number, number, number]);
+const fan = Array.from({ length: 10 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1) * 1.5, (i + 1) * 3.6] as [number, number, number]);
 ---
-<svg class="art" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} preserveAspectRatio="xMidYMid slice">
+<svg class="art" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} preserveAspectRatio="xMidYMid meet">
   <rect width={W} height={H} class="bg" />
   {kind === 'agent' && (
     <>
-      <rect x="25" y="16" width="270" height="30" rx="15" class="bubble" />
-      <text x="41" y="36" class="mono">what drove signups last week?</text>
-      <rect x="25" y="62" width="300" height="122" rx="10" class="panel" />
-      {bars.map((h, i) => (
-        <rect x={45 + i * 38} y={168 - h} width="24" height={h} rx="3" class={i === bars.length - 1 ? 'barA' : 'bar'} />
+      <rect x="25" y="14" width="235" height="28" rx="14" class="bubble" />
+      <text x="40" y="32" class="mono">weekly signups by source?</text>
+      <rect x="25" y="52" width="350" height="134" rx="10" class="panel" />
+      {chips.map((c) => (
+        <>
+          <rect x={c.x} y="62" width={c.w} height="18" rx="9" class="chip" />
+          <text x={c.x + 9} y="75" class="mono tiny">{c.t}</text>
+        </>
       ))}
-      <rect x="45" y="72" width="96" height="16" rx="8" class="chip" />
-      <text x="53" y="84" class="mono tiny">metric: signups</text>
-      <rect x="148" y="72" width="62" height="16" rx="8" class="chip" />
-      <text x="156" y="84" class="mono tiny">SQL ▸</text>
+      {weeks.map((w, i) => {
+        const x = 52 + i * 44; let y = 176;
+        return w.map((h, j) => { y -= h; return <rect x={x} y={y} width="28" height={h - 1.5} rx="2" class={i === weeks.length - 1 ? ['barA', 'barA2', 'barA3'][j] : ['bar', 'bar2', 'bar3'][j]} />; });
+      })}
     </>
   )}
   {kind === 'classifier' && (
     <>
-      {dots.map((d) => <circle cx={d.x} cy={d.y} r="3.6" class={d.b ? 'dot' : 'pt'} />)}
-      <line x1="215" y1="20" x2="250" y2="185" class="dash" />
+      <text x="30" y="28" class="mono small">wants something built</text>
+      <text x="220" y="28" class="mono small">wants a conversation</text>
+      {build.map((t, i) => (
+        <>
+          <rect x="30" y={40 + i * 30} width="160" height="22" rx="11" class="bubble" />
+          <text x="42" y={55 + i * 30} class="mono tiny">{t}</text>
+        </>
+      ))}
+      {talk.map((t, i) => (
+        <>
+          <rect x="220" y={40 + i * 30} width="160" height="22" rx="11" class="bubbleA" />
+          <text x="232" y={55 + i * 30} class="mono tiny">{t}</text>
+        </>
+      ))}
+      <rect x="120" y="140" width="160" height="24" rx="12" class="ambig" />
+      <text x="200" y="156" text-anchor="middle" class="mono tiny">build me a budget… ?</text>
+      <text x="200" y="184" text-anchor="middle" class="mono tiny muted">ambiguous: the rubric decides</text>
     </>
   )}
   {kind === 'threshold' && (
     <>
-      {hist2.map((h, i) => (
-        <rect x={30 + i * 21.5} y={172 - h} width="17" height={h} rx="2" class={i >= tBin ? 'barA soft' : 'bar'} />
+      {usageBins.map((h, i) => (
+        <rect x={30 + i * 21.5} y={176 - h} width="17" height={h} rx="2" class="bar faint" />
       ))}
-      <line x1={30 + tBin * 21.5 - 2.5} y1="20" x2={30 + tBin * 21.5 - 2.5} y2="176" class="dash" />
-      <text x={30 + tBin * 21.5 + 6} y="32" class="mono small">prompt to upgrade →</text>
       <line x1="25" y1="176" x2="375" y2="176" class="axis" />
+      <path d={path(conv)} class="line" />
+      <line x1={tx} y1="22" x2={tx} y2="176" class="dash" />
+      <circle cx={tx} cy={conv[18][1]} r="5" class="dot" />
+      <text x={tx - 8} y="32" text-anchor="end" class="mono small">upgrade prompt</text>
+      <text x="372" y="30" text-anchor="end" class="mono tiny muted">Pro conversion</text>
+      <text x="30" y="192" class="mono tiny muted">usage →</text>
     </>
   )}
   {kind === 'metric' && (
@@ -118,18 +127,22 @@ const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1
   )}
   {kind === 'leads' && (
     <>
-      {cells.map((c) => (
-        <rect x={c.x} y={c.y} width="28" height="22" rx="4" class={!c.filled ? 'empty' : c.top ? 'barA' : c.enriched ? 'cellE' : 'bar'} />
+      {funnel.map(([l, w], i) => (
+        <>
+          <rect x={(W - w) / 2} y={22 + i * 41} width={w} height="31" rx="5" class={i === funnel.length - 1 ? 'barA' : 'bar'} />
+          <text x={W / 2} y={42 + i * 41} text-anchor="middle" class={i === funnel.length - 1 ? 'mono small inv' : 'mono small ink'}>{l}</text>
+        </>
       ))}
-      <text x="60" y="188" class="mono small">product usage · + enrichment sources →</text>
     </>
   )}
   {kind === 'sql' && (
     <>
-      <text x="40" y="58" class="mono code"><tspan class="kw">select</tspan> week, count(distinct user_id)</text>
-      <text x="40" y="86" class="mono code"><tspan class="kw">from</tspan> <tspan class="hl">metrics.active_users</tspan></text>
-      <text x="40" y="114" class="mono code"><tspan class="kw">where</tspan> not is_internal</text>
-      <text x="40" y="142" class="mono code"><tspan class="kw">group by</tspan> 1</text>
+      <rect x="25" y="14" width="285" height="28" rx="14" class="bubble" />
+      <text x="40" y="32" class="mono">weekly active users, no internal?</text>
+      <text x="40" y="78" class="mono code"><tspan class="kw">select</tspan> week, count(distinct user_id)</text>
+      <text x="40" y="104" class="mono code"><tspan class="kw">from</tspan> events</text>
+      <text x="40" y="130" class="mono code"><tspan class="kw">where</tspan> <tspan class="hl">not is_internal_user</tspan></text>
+      <text x="40" y="156" class="mono code"><tspan class="kw">group by</tspan> week</text>
     </>
   )}
   {kind === 'forecast' && (
@@ -138,36 +151,42 @@ const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1
       <path d={path(hist)} class="line" />
       <path d={path([[lx, ly], ...fan.map(([x, y]) => [x, y] as [number, number])])} class="dash" />
       <circle cx={lx} cy={ly} r="5" class="dot" />
+      <line x1="25" y1="176" x2="375" y2="176" class="axis" />
     </>
   )}
 </svg>
 
 <style>
-  .art { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; }
+  .art { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; background: var(--surface); }
   .bg { fill: var(--surface); }
-  .line { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .line { fill: none; stroke: var(--muted); stroke-width: 1.75; stroke-linejoin: round; stroke-linecap: round; }
   .dash { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 5; }
   .axis { stroke: var(--rule); stroke-width: 1.5; }
   .dot { fill: var(--accent); }
-  .pt { fill: var(--line); opacity: 0.55; }
-  .area { fill: var(--accent); opacity: 0.1; }
+  .area { fill: var(--accent); opacity: 0.12; }
   .bubble { fill: var(--bg); stroke: var(--rule); }
-  .bar { fill: var(--line); opacity: 0.35; }
-  .barA { fill: var(--accent); }
+  .bubbleA { fill: color-mix(in srgb, var(--accent) 12%, var(--bg)); stroke: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+  .ambig { fill: var(--bg); stroke: var(--line); stroke-dasharray: 4 3; }
   .panel { fill: var(--bg); stroke: var(--rule); }
   .chip { fill: var(--surface); stroke: var(--rule); }
-  .soft { opacity: 0.85; }
+  .bar { fill: var(--line); opacity: 0.45; }
+  .bar2 { fill: var(--line); opacity: 0.3; }
+  .bar3 { fill: var(--line); opacity: 0.18; }
+  .faint { opacity: 0.22; }
+  .barA { fill: var(--accent); }
+  .barA2 { fill: var(--accent); opacity: 0.65; }
+  .barA3 { fill: var(--accent); opacity: 0.35; }
   .edge { fill: none; stroke: var(--line); stroke-width: 1.5; }
   .edgeA { fill: none; stroke: var(--accent); stroke-width: 2; }
   .node { fill: var(--bg); stroke: var(--line); }
   .nodeA { fill: var(--accent); }
-  .empty { fill: none; stroke: var(--rule); stroke-dasharray: 3 3; }
-  .cellE { fill: var(--line); opacity: 0.6; }
   .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; fill: var(--muted); }
-  .mono.small { font-size: 11px; }
-  .mono.tiny { font-size: 9.5px; }
-  .inv { fill: var(--bg); font-weight: 600; }
-  .mono.code { font-size: 15px; fill: var(--ink); }
+  .mono.small { font-size: 11.5px; }
+  .mono.tiny { font-size: 10.5px; fill: var(--ink); }
+  .mono.muted { fill: var(--muted); }
+  .mono.ink { fill: var(--ink); }
+  .mono.code { font-size: 14px; fill: var(--ink); }
+  .inv { fill: var(--bg) !important; font-weight: 600; }
   .kw { fill: var(--muted); }
   .hl { fill: var(--accent); }
 </style>
