@@ -22,8 +22,8 @@ body { margin: 0; width: 1200px; height: 630px; background: #f7f5f0; color: #1c1
 svg { width: 100%; height: auto; margin-top: auto; color: #9b978e; }
 .signal-dot { fill: #b83c0a } .signal-ring { fill: none; stroke: #b83c0a; opacity: .35 }
 </style></head><body><div class="c">
-<div class="n">Leon Wu</div><div class="k">Growth · monetization · AI for data</div>
-<div class="l">I work on the questions companies <em>make money on</em>, then build AI tools so people can answer the next one without me.</div>
+<div class="n">Leon Wu</div><div class="k">Data science · data engineering · AI for data</div>
+<div class="l">I built <em>Oracle</em>, Replit's AI data analyst. Over half the company asks it questions every week.</div>
 ${signal.replace(/class="[^"]*"/, '')}
 </div></body></html>`;
 

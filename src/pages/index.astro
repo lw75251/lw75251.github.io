@@ -13,8 +13,8 @@ const work = [
     href: 'https://replit.com',
     title: 'Founding Member of Technical Staff, Data (Staff)',
     points: [
-      { text: 'Growth and monetization: pricing tests, upgrade prompts, lead scoring. I own the revenue metrics and the data stack beneath them, from event instrumentation through dbt to reporting.' },
-      { lead: 'Oracle.', text: 'Led our internal analytics agent, from the agent harness to the semantic layer underneath. Over half the company uses it every week, and it replaced Hex and Amplitude, saving seven figures a year.' },
+      { text: 'Growth, monetization and revenue metrics, and the data stack underneath them.' },
+      { lead: 'Oracle', text: 'replaced Hex and Amplitude, saving seven figures a year.' },
     ],
   },
   {
@@ -22,37 +22,33 @@ const work = [
     href: 'https://www.indeed.com',
     title: 'BI Analyst → Senior Data Scientist, Finance',
     points: [
-      { text: 'Revenue forecasting for leadership, and customer lifetime-value models that guided marketing spend.' },
-      { lead: 'Text-to-SQL.', text: 'Prototyped Indeed’s Text-to-SQL assistant in January 2023. It grew into a 10-person team and a tool thousands of people used weekly.' },
+      { text: 'Revenue forecasting, lifetime-value models, and the revenue data mart.' },
+      { lead: 'Text-to-SQL', text: 'prototyped in January 2023; it grew into a 10-person team.' },
     ],
   },
   {
     company: 'Rauxa',
     href: 'https://www.rauxa.com',
     title: 'Data Scientist',
-    points: [{ text: 'Marketing analytics, A/B testing and attribution for agency clients.' }],
+    points: [{ text: 'Marketing analytics and experimentation.' }],
   },
 ];
 
-const built = [
-  { name: 'Quairy', href: 'https://github.com/lw75251/datasetai', what: 'An early Text-to-SQL agent from 2023 (ReAct plus retrieval) that also answers questions over messy, multi-table spreadsheets.' },
-  { name: 'AI Solution Explorer', href: 'https://github.com/lw75251/ai_solutions_generator', what: 'Generates candidate approaches to a hard problem with Claude, then scores each one for feasibility and risk.' },
-];
 ---
 <Base>
   <section class="hero" aria-labelledby="name">
     <h1 id="name" class="visually-hidden">Leon Wu</h1>
-    <p class="kicker">Growth · monetization · AI for data</p>
+    <p class="kicker">Data science · data engineering · AI for data</p>
     <p class="lede">
-      I work on the questions companies <em>make money on</em>, then build AI tools so people can answer the next one without me.
+      I built <em>Oracle</em>, Replit's AI data analyst. Over half the company asks it questions every week.
     </p>
     <figure class="hero-fig">
       <Signal seed="hero" width={640} height={64} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
       <figcaption>A random walk with one real shift. My job is finding the dot.</figcaption>
     </figure>
     <p class="bio">
-      I'm on Replit's founding data team. Before that, I did finance data science at Indeed. I studied probability and
-      statistics, so I don't trust a number until I know where it came from.
+      I'm on Replit's founding data team, working on growth, monetization and revenue. I also own the data
+      underneath: event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.
     </p>
   </section>
 
@@ -101,26 +97,11 @@ const built = [
     </section>
   )}
 
-  <section aria-labelledby="built">
-    <h2 class="kicker" id="built">Side projects</h2>
-    <ul class="entries">
-      {built.map((b) => (
-        <li>
-          <a href={b.href}>
-            <span class="title">{b.name}</span>
-            <span class="meta">GitHub ↗</span>
-            <span class="desc">{b.what}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
 
   <section aria-labelledby="hello">
     <h2 class="kicker" id="hello">Get in touch</h2>
     <p>
-      Happy to talk pricing, experimentation, evals or agent harnesses. Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' '}
-      or find me on <a href={SITE.linkedin}>LinkedIn</a>. My resume is <a href={RESUME_MAILTO}>one email away</a>.
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' · '}<a href={SITE.linkedin}>LinkedIn</a>{' · '}<a href={RESUME_MAILTO}>Resume on request</a>
     </p>
   </section>
 </Base>

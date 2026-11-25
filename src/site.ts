@@ -5,7 +5,7 @@ export const SITE = {
   name: 'Leon Wu',
   title: 'Leon Wu · Staff Data Scientist',
   description:
-    'Leon Wu is a staff data scientist on Replit’s founding data team, working on product analytics, growth and monetization, who also builds AI tools for data. Previously finance data science at Indeed.',
+    'Leon Wu built Oracle, Replit’s AI data analyst. Staff data scientist and data engineer on Replit’s founding data team; previously finance data science at Indeed.',
   email: 'lw75251@gmail.com',
   github: 'https://github.com/lw75251',
   linkedin: 'https://www.linkedin.com/in/aleonwu/',

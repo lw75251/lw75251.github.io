@@ -1,6 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE, RESUME_MAILTO } from '../site';
+
+const built = [
+  { name: 'Quairy', href: 'https://github.com/lw75251/datasetai', what: 'An early Text-to-SQL agent from 2023 (ReAct plus retrieval) that also answers questions over messy, multi-table spreadsheets.' },
+  { name: 'AI Solution Explorer', href: 'https://github.com/lw75251/ai_solutions_generator', what: 'Generates candidate approaches to a hard problem with Claude, then scores each one for feasibility and risk.' },
+];
 ---
 <Base title="About" description="About Leon Wu: staff data scientist for product, growth and revenue, who builds AI tools for data.">
   <div class="about">
@@ -17,12 +22,22 @@ import { SITE, RESUME_MAILTO } from '../site';
           My day job is the questions companies make money on: what users actually do, who should pay, at what price,
           and whether the revenue number is right. I did that for agency clients at Rauxa, for finance at Indeed (revenue
           forecasts and customer lifetime value), and now for product, growth and monetization at Replit, where I was one
-          of the first two people on the data team.
+          of the first two people on the data team. There that means pricing tests, upgrade prompts, lead scoring, and
+          the company's revenue metrics.
         </p>
         <p>
           The other half of my work is making that kind of answer self-serve. At Indeed I prototyped a Text-to-SQL
           assistant in January 2023, and it grew into a 10-person team. At Replit I led Oracle, our internal analytics agent.
           It sits on a semantic layer the whole company agrees on, and it replaced Hex and Amplitude, saving seven figures a year.
+        </p>
+        <p>
+          Underneath both is data engineering, which I do a lot of. At Replit I own billing and product data end to end:
+          event instrumentation, 1,000+ dbt models on a petabyte-scale warehouse, and a daily freshness SLA on the
+          metrics leadership looks at. At Indeed I raised the revenue data mart's monthly SLA compliance from 60% to 95%,
+          and built a self-serve forecasting platform on SageMaker and MLflow that 20+ teams used to run 2,000+ models.
+        </p>
+        <p class="stack">
+          BigQuery · ClickHouse · Snowflake · dbt · Airflow · Pub/Sub · Segment · Python · SQL · TypeScript
         </p>
         <p>
           The work I'm proudest of rarely looks like a model. It's usually one well-framed question, a careful
@@ -31,6 +46,21 @@ import { SITE, RESUME_MAILTO } from '../site';
       </div>
     </div>
   </div>
+
+  <section aria-labelledby="built">
+    <h2 class="kicker" id="built">Side projects</h2>
+    <ul class="entries">
+      {built.map((b) => (
+        <li>
+          <a href={b.href}>
+            <span class="title">{b.name}</span>
+            <span class="meta">GitHub ↗</span>
+            <span class="desc">{b.what}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 
   <section aria-labelledby="off">
     <h2 class="kicker" id="off">Off the clock</h2>
@@ -50,6 +80,7 @@ import { SITE, RESUME_MAILTO } from '../site';
 
 <style>
   .about + section { margin-top: 4.5rem; }
+  .stack { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
   .about { display: grid; grid-template-columns: 9rem 1fr; gap: 2rem; align-items: start; }
   .photo { width: 100%; height: auto; border-radius: 6px; filter: grayscale(0.15); }
   .about h1 { margin-bottom: 1.5rem; }
