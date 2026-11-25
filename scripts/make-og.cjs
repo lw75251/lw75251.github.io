@@ -1,12 +1,10 @@
-// Regenerates public/og.png (the link-preview image) from the built homepage.
-// Usage: npm run build && node scripts/make-og.cjs   (needs Playwright + Chromium installed)
+// Regenerates public/og.png (the link-preview image).
+// Usage: node scripts/make-og.cjs   (needs Playwright + Chromium installed)
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..');
-const home = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8');
-const signal = home.match(/<svg[^>]*hero-signal[\s\S]*?<\/svg>/)[0];
 const font = (p) => 'file://' + path.join(root, 'node_modules/@fontsource-variable', p);
 
 const html = `<!doctype html><html><head><style>
@@ -15,16 +13,13 @@ const html = `<!doctype html><html><head><style>
 @font-face { font-family: I; src: url(${font('inter/files/inter-latin-wght-normal.woff2')}); }
 body { margin: 0; width: 1200px; height: 630px; background: #f7f5f0; color: #1c1b19; font-family: I; }
 .c { padding: 80px 90px; box-sizing: border-box; height: 100%; display: flex; flex-direction: column; }
-.n { font-weight: 600; font-size: 30px; }
+.n { font-family: N; font-weight: 500; font-size: 40px; display: flex; align-items: center; gap: 16px; }
 .k { font-family: ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: #5f5d57; font-size: 20px; margin-top: 10px; }
-.l { font-family: N; font-size: 60px; line-height: 1.15; margin-top: 46px; max-width: 980px; }
+.l { margin-top: auto !important; margin-bottom: 20px; font-family: N; font-size: 60px; line-height: 1.15; margin-top: 46px; max-width: 980px; }
 .l em { color: #b83c0a; }
-svg { width: 100%; height: auto; margin-top: auto; color: #9b978e; }
-.signal-dot { fill: #b83c0a } .signal-ring { fill: none; stroke: #b83c0a; opacity: .35 }
 </style></head><body><div class="c">
-<div class="n">Leon Wu</div><div class="k">Data science · data engineering · AI for data</div>
-<div class="l">I built <em>Oracle</em>, Replit's internal analytics agent. Over half the company asks it questions every week.</div>
-${signal.replace(/class="[^"]*"/, '')}
+<div class="n"><svg width="34" height="34" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="#b83c0a" stroke-width="1.5" opacity="0.45"/><circle cx="10" cy="10" r="4" fill="#b83c0a"/></svg><span>Leon Wu</span></div><div class="k">Staff Data Scientist · Early Replit</div>
+<div class="l">I scaled <em>Oracle</em>, Replit's internal analytics agent, to over half the company, every week.</div>
 </div></body></html>`;
 
 (async () => {
