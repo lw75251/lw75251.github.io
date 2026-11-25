@@ -139,10 +139,6 @@ const nodeX = (i: number) => 60 + i * 160;
       </p>
     </div>
     <img src="/leon.jpg" alt="Portrait of Leon Wu" width="667" height="1000" class="intro-photo" />
-    <figure class="intro-sig">
-      <Signal seed="hero" width={640} height={56} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
-      <figcaption>A random walk with one real shift. Most of my job is finding the dot.</figcaption>
-    </figure>
   </section>
 
   <section id="changepoints" aria-labelledby="cp-h">
@@ -259,10 +255,7 @@ const nodeX = (i: number) => 60 + i * 160;
   .card { background: color-mix(in srgb, var(--surface) 55%, var(--bg)); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
 
   /* Intro */
-  .intro { display: grid; grid-template-columns: 1fr 10rem; gap: 2rem; padding: 2rem 2.25rem 1.5rem; align-items: center; }
-  .intro-sig { grid-column: 1 / -1; margin: 0.25rem 0 0; }
-  .intro :global(.hero-signal) { width: 100%; height: auto; color: var(--line); }
-  .intro-sig figcaption { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; }
+  .intro { display: grid; grid-template-columns: 1fr 10rem; gap: 2rem; padding: 2rem 2.25rem; align-items: center; }
   .intro h1 { font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem); }
   .role { font-size: 0.95rem; color: var(--muted); margin: 0.6rem 0 0; }
   .hook { margin: 0.4rem 0 0; max-width: 36rem; }
