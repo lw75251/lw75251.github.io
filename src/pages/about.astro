@@ -1,50 +1,45 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE } from '../site';
+import { SITE, RESUME_MAILTO } from '../site';
 ---
-<Base title="About" description="About Leon Wu: a statistician who builds tools.">
+<Base title="About" description="About Leon Wu: a statistician who builds agents and data systems.">
   <div class="about">
-    <img src="/leon.jpg" alt="Leon Wu" width="667" height="1000" class="photo" />
+    <img src="/leon.jpg" alt="Portrait of Leon Wu" width="667" height="1000" class="photo" />
     <div>
       <h1>About</h1>
       <div class="prose">
         <p>
           I grew up in New Jersey, went west to UC San Diego, and came back to New York. I started out in
           finance and business, found programming, and ended up with a degree in probability and statistics.
-          That combination still shapes how I work: I'm skeptical of a number until I know where it came from.
+          That combination still shapes how I work: I don't trust a number until I know where it came from.
         </p>
         <p>
           My career has followed one question: how do you get the right answer to the people who need it?
-          At an ad agency, the answer was dashboards and scrapers. At Indeed, it was forecasting models, then a
-          Text-to-SQL assistant I prototyped in early 2023 that grew into a real team. Now I'm on the data team at
-          Replit, where the answer is increasingly an agent that sits on top of a well-built semantic layer.
+          At an ad agency, the answer was experiments and data apps. At Indeed, it was forecasting models, and then a
+          Text-to-SQL assistant I prototyped in early 2023. It grew into a 10-person team. At Replit I was one of the first two
+          people on the data team, and the answer there is an agent sitting on top of a semantic layer the whole company
+          agrees on.
         </p>
         <p>
           The work I'm proudest of rarely looks like a model. It's usually one well-framed question, a careful
-          look at what users are actually doing, and a tool that means nobody has to ask me again.
+          look at what users actually do, and a tool that means nobody has to ask me again.
         </p>
       </div>
     </div>
   </div>
 
   <section aria-labelledby="off">
-    <p class="kicker" id="off">Off the clock</p>
-    <ul class="chips">
-      <li>♟ Chess</li>
-      <li>League of Legends</li>
-      <li>Riftbound</li>
-      <li>Guitar</li>
-      <li>Lakers</li>
-      <li>Man City</li>
-      <li>Broncos (let's ride)</li>
-      <li>Trying every new dev tool the week it ships</li>
-    </ul>
+    <h2 class="kicker" id="off">Off the clock</h2>
+    <p>
+      Chess, guitar, and too many hours of League of Legends and Riftbound. I'm a Lakers, Man City and Broncos fan, which
+      is a lot of emotional variance to carry.
+    </p>
   </section>
 
   <section aria-labelledby="contact">
-    <p class="kicker" id="contact">Contact</p>
+    <h2 class="kicker" id="contact">Contact</h2>
     <p>
-      <a href={`mailto:${SITE.email}`}>{SITE.email}</a> · <a href={SITE.github}>GitHub</a>{' · '}<a href={SITE.linkedin}>LinkedIn</a>. My resume is available on request.
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' · '}<a href={SITE.linkedin}>LinkedIn</a>{' · '}<a href={SITE.github}>GitHub</a>{' · '}<a href={RESUME_MAILTO}>Request my resume</a>
     </p>
   </section>
 </Base>

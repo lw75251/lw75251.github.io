@@ -1,14 +1,17 @@
 import { getCollection } from 'astro:content';
+import { FORECASTS } from './data/forecasts';
 
 export const SITE = {
   name: 'Leon Wu',
-  title: 'Leon Wu',
+  title: 'Leon Wu · Data & AI engineer',
   description:
-    'Leon Wu: data, statistics and agents. Essays and notes on finding the signal and building tools so everyone can find their own.',
+    'Leon Wu builds AI analysts and the data systems under them. Founding data scientist at Replit; previously Text-to-SQL and forecasting at Indeed.',
   email: 'lw75251@gmail.com',
   github: 'https://github.com/lw75251',
   linkedin: 'https://www.linkedin.com/in/aleonwu/',
 };
+
+export const RESUME_MAILTO = `mailto:${SITE.email}?subject=${encodeURIComponent('Resume request')}`;
 
 /** Published writing, newest first. Drafts are included only in `astro dev`. */
 export async function getWriting() {
@@ -16,10 +19,18 @@ export async function getWriting() {
   return all.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
-/** Titles of drafts in progress, shown on the homepage as "on the desk". */
-export async function getDrafts() {
-  const drafts = await getCollection('writing', ({ data }) => data.draft);
-  return drafts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+/** True once at least one essay is published; Writing stays out of the nav until then. */
+export async function hasPublishedWriting() {
+  return (await getCollection('writing', ({ data }) => !data.draft)).length > 0;
+}
+
+/** Real forecasts only; examples show up in `astro dev` so the page can be previewed. */
+export function getForecasts() {
+  return FORECASTS.filter((f) => import.meta.env.DEV || !f.example);
+}
+
+export function hasForecasts() {
+  return FORECASTS.some((f) => !f.example);
 }
 
 export function formatDate(d: Date, style: 'short' | 'long' = 'short') {

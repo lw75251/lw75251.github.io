@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+import { getForecasts, hasForecasts, formatDate } from '../site';
+import { brier, calibrationBins, isResolved } from '../lib/forecasts';
+
+const all = getForecasts();
+const open = all.filter((f) => !isResolved(f)).sort((a, b) => a.resolves.localeCompare(b.resolves));
+const resolved = all.filter(isResolved).sort((a, b) => (b.resolvedOn ?? '').localeCompare(a.resolvedOn ?? ''));
+const score = brier(resolved);
+const bins = calibrationBins(resolved);
+
+// Calibration plot geometry
+const S = 260, P = 34;
+const px = (v: number) => P + v * (S - P * 2);
+const py = (v: number) => S - P - v * (S - P * 2);
+const maxN = Math.max(1, ...bins.map((b) => b.n));
+const pct = (p: number) => `${Math.round(p * 100)}%`;
+const d = (s: string) => formatDate(new Date(s), 'long');
+---
+<Base
+  title="Forecasts"
+  description="Leon Wu's public, falsifiable forecasts about data and AI, each with a probability, scored in the open."
+  noindex={!hasForecasts()}
+>
+  <h1>Forecasts</h1>
+  <p class="muted sub">
+    Dated predictions about data and AI. Each gets a probability when I make it and is scored when it resolves. I never edit a probability after the fact.
+    The score is the <a href="https://en.wikipedia.org/wiki/Brier_score">Brier score</a>: 0 is perfect, and always saying 50% scores 0.25.
+  </p>
+
+  {resolved.length > 0 && (
+    <section class="score" aria-labelledby="track">
+      <h2 class="kicker" id="track">Track record</h2>
+      <div class="score-grid">
+        <div>
+          <p class="big">{score.toFixed(3)}</p>
+          <p class="muted small">Brier score over {resolved.length} resolved forecast{resolved.length === 1 ? '' : 's'}.</p>
+        </div>
+        <figure>
+          <svg viewBox={`0 0 ${S} ${S}`} role="img" aria-label="Calibration plot: stated probability against how often those forecasts came true">
+            <rect x={P} y={P} width={S - P * 2} height={S - P * 2} class="frame" />
+            <line x1={px(0)} y1={py(0)} x2={px(1)} y2={py(1)} class="diag" />
+            {[0, 0.5, 1].map((t) => (
+              <>
+                <text x={px(t)} y={S - P + 16} text-anchor="middle">{pct(t)}</text>
+                <text x={P - 8} y={py(t) + 4} text-anchor="end">{pct(t)}</text>
+              </>
+            ))}
+            {bins.filter((b) => b.n > 0).map((b) => (
+              <circle cx={px(b.predicted)} cy={py(b.observed)} r={3 + 5 * Math.sqrt(b.n / maxN)} class="pt">
+                <title>{`${b.n} forecast(s) at ~${pct(b.predicted)}: ${pct(b.observed)} came true`}</title>
+              </circle>
+            ))}
+          </svg>
+          <figcaption>Stated probability (x) against how often it happened (y). Points on the diagonal mean I'm calibrated. Bigger points stand for more forecasts.</figcaption>
+        </figure>
+      </div>
+    </section>
+  )}
+
+  {open.length > 0 && (
+    <section aria-labelledby="open">
+      <h2 class="kicker" id="open">Open</h2>
+      <ul class="entries">
+        {open.map((f) => (
+          <li>
+            <div class="row">
+              <span class="claim">{f.claim}</span>
+              <span class="prob">{pct(f.p)}</span>
+              <span class="desc meta">Made {d(f.made)} · resolves {d(f.resolves)}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {resolved.length > 0 && (
+    <section aria-labelledby="resolved">
+      <h2 class="kicker" id="resolved">Resolved</h2>
+      <ul class="entries">
+        {resolved.map((f) => (
+          <li>
+            <div class="row">
+              <span class="claim">{f.claim}</span>
+              <span class="prob">{pct(f.p)} <span class={f.outcome ? 'yes' : 'no'}>{f.outcome ? 'Yes' : 'No'}</span></span>
+              <span class="desc meta">Made {d(f.made)} · resolved {d(f.resolvedOn ?? f.resolves)}{f.note && ` · ${f.note}`}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {all.length === 0 && <p class="muted">The first forecasts are coming soon.</p>}
+</Base>
+
+<style>
+  .sub { margin: 1rem 0 2.5rem; }
+  .claim { font-family: var(--serif); font-size: 1.15rem; line-height: 1.35; }
+  .prob { font-family: ui-monospace, monospace; font-size: 0.95rem; white-space: nowrap; }
+  .yes, .no { font-size: 0.75rem; margin-left: 0.4rem; padding: 0.1rem 0.4rem; border-radius: 4px; background: var(--surface); }
+  .yes { color: var(--ink); }
+  .no { color: var(--muted); text-decoration: line-through; }
+  .score-grid { display: grid; grid-template-columns: 1fr 260px; gap: 2rem; align-items: center; }
+  .big { font-family: var(--serif); font-size: 3.5rem; line-height: 1; margin: 0 0 0.5rem; }
+  .small { font-size: 0.9rem; margin: 0; }
+  figure { margin: 0; }
+  svg { width: 100%; height: auto; display: block; }
+  svg text { font-family: ui-monospace, monospace; font-size: 10px; fill: var(--muted); }
+  .frame { fill: none; stroke: var(--rule); }
+  .diag { stroke: var(--line); stroke-dasharray: 3 4; }
+  .pt { fill: var(--accent); fill-opacity: 0.85; }
+  figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+  @media (max-width: 560px) { .score-grid { grid-template-columns: 1fr; } }
+</style>

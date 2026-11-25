@@ -1,54 +1,71 @@
 ---
 import Base from '../layouts/Base.astro';
 import Signal from '../components/Signal.astro';
-import { SITE, getWriting, getDrafts, formatDate } from '../site';
+import { SITE, RESUME_MAILTO, getWriting, getForecasts, formatDate } from '../site';
+import { brier } from '../lib/forecasts';
 
 const writing = (await getWriting()).slice(0, 5);
-const drafts = import.meta.env.DEV ? [] : await getDrafts();
+const resolved = getForecasts().filter((f) => f.outcome !== undefined);
 
 const work = [
   {
     company: 'Replit',
     href: 'https://replit.com',
-    title: 'Member of Technical Staff',
-    what: 'Data team. Built the AI analyst most of the company now asks its data questions to.',
+    title: 'Founding Data Scientist',
+    what: 'One of the first two people on the data team. I built and run the internal analytics agent over half the company uses every week, and I own billing and product data end to end.',
   },
   {
     company: 'Indeed',
     href: 'https://www.indeed.com',
     title: 'Senior Data Scientist',
-    what: 'Finance data science. Prototyped Indeed’s Text-to-SQL chatbot and built its self-serve forecasting platform.',
+    what: 'Prototyped Indeed’s Text-to-SQL assistant in early 2023. It grew into a 10-person team and a tool thousands of people used weekly. Also built the self-serve forecasting platform dozens of teams ran their models on.',
   },
   {
     company: 'Rauxa',
     href: 'https://www.rauxa.com',
     title: 'Data Scientist',
-    what: 'Marketing analytics. A/B tests and data apps that helped win new clients.',
+    what: 'Marketing analytics and experimentation for agency clients.',
   },
 ];
 
 const built = [
-  { name: 'AI Solution Explorer', href: 'https://github.com/lw75251/ai_solutions_generator', what: 'Generate solutions to hard problems, then weigh them by feasibility and risk.' },
-  { name: 'Quairy', href: 'https://github.com/lw75251/datasetai', what: 'My late-2023 Text-to-SQL demo: ReAct agents and vector search, pitched to small businesses.' },
-  { name: 'Spreadsheet Q&A', href: 'https://github.com/lw75251/datasetai', what: 'Ask plain-English questions of messy Excel files with several tables per sheet.' },
-  { name: 'Alfred', href: 'https://github.com/lw75251/frontend_alfred', what: 'QR-code ordering for restaurants, built in Flutter before it was everywhere in the US.' },
+  { name: 'Quairy', href: 'https://github.com/lw75251/datasetai', what: 'An early Text-to-SQL agent from 2023 (ReAct plus retrieval) that also answers questions over messy, multi-table spreadsheets.' },
+  { name: 'AI Solution Explorer', href: 'https://github.com/lw75251/ai_solutions_generator', what: 'Generates candidate approaches to a hard problem with Claude, then scores each one for feasibility and risk.' },
 ];
 ---
 <Base>
-  <section class="intro">
-    <p class="kicker">Data · statistics · agents</p>
+  <section class="hero" aria-labelledby="name">
+    <h1 id="name" class="name">Leon Wu</h1>
+    <p class="kicker">Agents · evals · data infrastructure</p>
     <p class="lede">
-      I look for the <em>one number</em> that changes the plan, then build the tools so everyone else can find theirs.
+      I build agents that answer data questions <em>correctly</em>, and the semantic layers and evals that keep them honest.
     </p>
-    <p class="muted bio">
-      I'm Leon. I'm on the data team at Replit. Before that I spent years at Indeed forecasting revenue and
-      building early LLM tools for data. I studied probability and statistics, and I can't stop building things. I live in New York.
+    <Signal seed="hero" width={640} height={64} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
+    <p class="bio">
+      I'm the founding data scientist at Replit. I own the company's revenue metrics, and I've kept them
+      consistent through two fundraises. Before that, at Indeed, I built one of the first
+      LLM tools for asking data questions in plain English. I studied probability and statistics, so I don't trust
+      a number until I know where it came from.
     </p>
   </section>
 
-  <section aria-labelledby="writing">
-    <p class="kicker" id="writing">Writing</p>
-    {writing.length > 0 ? (
+  <section aria-labelledby="work">
+    <h2 class="kicker" id="work">Work</h2>
+    <ul class="entries jobs">
+      {work.map((w) => (
+        <li>
+          <div class="row">
+            <span class="title"><a href={w.href} class="co">{w.company}</a> <span class="role">{w.title}</span></span>
+            <span class="desc">{w.what}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {writing.length > 0 && (
+    <section aria-labelledby="writing">
+      <h2 class="kicker" id="writing">Writing</h2>
       <ul class="entries">
         {writing.map((p) => (
           <li>
@@ -62,33 +79,21 @@ const built = [
           </li>
         ))}
       </ul>
-    ) : (
-      <p class="muted">The first essays are being written.</p>
-    )}
-    {drafts.length > 0 && (
-      <p class="muted on-desk">
-        <span class="kicker inline">On the desk</span>
-        {drafts.map((d, i) => <>{i > 0 && ' · '}<em>{d.data.title}</em></>)}
-      </p>
-    )}
-  </section>
+    </section>
+  )}
 
-  <section aria-labelledby="work">
-    <p class="kicker" id="work">Work</p>
-    <ul class="entries jobs">
-      {work.map((w) => (
-        <li>
-          <div class="row">
-            <span class="title"><a href={w.href} class="co">{w.company}</a> <span class="role">{w.title}</span></span>
-            <span class="desc">{w.what}</span>
-          </div>
-        </li>
-      ))}
-    </ul>
-  </section>
+  {resolved.length >= 5 && (
+    <section aria-labelledby="calibration">
+      <h2 class="kicker" id="calibration">Calibration</h2>
+      <p>
+        Brier score <strong>{brier(resolved).toFixed(2)}</strong> across {resolved.length} resolved public forecasts.
+        <a href="/forecasts">See every forecast →</a>
+      </p>
+    </section>
+  )}
 
   <section aria-labelledby="built">
-    <p class="kicker" id="built">Built on the side</p>
+    <h2 class="kicker" id="built">Side projects</h2>
     <ul class="entries">
       {built.map((b) => (
         <li>
@@ -103,21 +108,21 @@ const built = [
   </section>
 
   <section aria-labelledby="hello">
-    <p class="kicker" id="hello">Say hello</p>
+    <h2 class="kicker" id="hello">Get in touch</h2>
     <p>
-      I'm happy to talk about data, evals, agent harnesses, or a good chess opening. You can reach me at{' '}
-      <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or on <a href={SITE.linkedin}>LinkedIn</a>. My resume is available on request.
+      Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or find me on <a href={SITE.linkedin}>LinkedIn</a>.
+      My resume is <a href={RESUME_MAILTO}>one email away</a>.
     </p>
   </section>
 </Base>
 
 <style>
-  .intro .lede { max-width: 34rem; }
-  .bio { margin: 1.5rem 0 0; max-width: 34rem; }
-  .on-desk { margin: 1.25rem 0 0; font-size: 0.95rem; }
-  .on-desk em { font-family: var(--serif); font-size: 1.05rem; }
+  .name { font-size: 1rem; font-family: var(--sans); font-weight: 600; letter-spacing: 0; margin: 0 0 0.35rem; }
+  .hero .kicker { margin-bottom: 1.5rem; }
+  .hero .lede { max-width: 35rem; }
+  .hero :global(.hero-signal) { width: 100%; height: auto; margin: 2.25rem 0 2rem; color: var(--line); }
+  .bio { margin: 0; max-width: 35rem; color: var(--muted); }
   .jobs .co { display: inline; padding: 0; text-decoration: none; }
   .jobs .role { font-family: var(--sans); font-size: 0.92rem; color: var(--muted); margin-left: 0.4rem; }
   @media (max-width: 560px) { .jobs .role { display: block; margin: 0.15rem 0 0; } }
-  .kicker.inline { display: inline; margin-right: 0.6rem; }
 </style>

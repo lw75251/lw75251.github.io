@@ -9,8 +9,12 @@ interface Props {
   height?: number;
   points?: number;
   label?: string;
+  strokeWidth?: number;
+  class?: string;
+  /** Radius of the highlighted point. */
+  dot?: number;
 }
-const { seed, width = 96, height = 24, points = 28, label } = Astro.props;
+const { seed, width = 96, height = 24, points = 28, label, strokeWidth = 1.25, class: className, dot = 2.25 } = Astro.props;
 
 function hash(s: string) {
   let h = 2166136261;
@@ -43,7 +47,7 @@ const d = ys.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)
 const cx = x(shiftAt), cy = y(ys[shiftAt]);
 ---
 <svg
-  class="signal"
+  class:list={['signal', className]}
   viewBox={`0 0 ${width} ${height}`}
   width={width}
   height={height}
@@ -51,13 +55,13 @@ const cx = x(shiftAt), cy = y(ys[shiftAt]);
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
 >
-  <path d={d} fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round" />
-  <circle cx={cx} cy={cy} r="4.5" class="signal-ring" />
-  <circle cx={cx} cy={cy} r="2.25" class="signal-dot" />
+  <path d={d} fill="none" stroke="currentColor" stroke-width={strokeWidth} vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round" />
+  <circle cx={cx} cy={cy} r={dot * 2} class="signal-ring" />
+  <circle cx={cx} cy={cy} r={dot} class="signal-dot" />
 </svg>
 
 <style>
-  .signal { display: block; color: var(--faint); overflow: visible; }
+  .signal { display: block; color: var(--line); overflow: visible; flex: none; }
   .signal-dot { fill: var(--accent); }
   .signal-ring { fill: none; stroke: var(--accent); stroke-width: 1; opacity: 0.35; }
 </style>
