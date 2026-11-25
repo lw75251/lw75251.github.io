@@ -114,11 +114,19 @@ const points: Point[] = [
   },
 ];
 
+const buildLog = [
+  { year: '2025', name: 'AI Solution Explorer', what: 'Generates candidate approaches to a hard problem with Claude, then scores each for feasibility and risk.', stack: 'React · Express · shadcn/ui · Anthropic API', href: 'https://github.com/lw75251/ai_solutions_generator' },
+  { year: '2023', name: 'Quairy', what: 'A Text-to-SQL agent I demoed to businesses, plus plain-English Q&A over messy multi-table spreadsheets.', stack: 'LangChain · ReAct agents · vector search · Streamlit', href: 'https://github.com/lw75251/datasetai' },
+  { year: '2020', name: 'Alfred', what: 'QR-code ordering for restaurants, before it was everywhere in the US: a Flutter app and a TypeScript backend.', stack: 'Flutter · Dart · TypeScript · Firebase', href: 'https://github.com/lw75251/frontend_alfred' },
+  { year: '2020', name: 'Nova Money', what: 'Weekend engineer at a fintech startup. Built a test framework that took backend coverage from ~30% to 100%.', stack: 'Flutter · TDD · A/B testing', href: '' },
+  { year: '2019', name: 'Gravitate', what: 'A rideshare app for UC San Diego students heading to the airport or home to LA.', stack: 'Android · Java · Firebase', href: 'https://github.com/lw75251/Gravitate-Front-End' },
+];
+
 const lineage = [
-  { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
-  { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
-  { org: 'Indeed', role: 'Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
   { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.' },
+  { org: 'Indeed', role: 'Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
+  { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
+  { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
 ];
 const nodeX = (i: number) => 60 + i * 160;
 ---
@@ -130,6 +138,10 @@ const nodeX = (i: number) => 60 + i * 160;
       <p class="hook">
         Rebuilt and scaled <strong>Oracle</strong>, Replit’s internal analytics agent. I also own growth, monetization and revenue
         analytics, and the data stack underneath. Previously at Indeed.
+      </p>
+      <p class="builder">
+        A builder at heart: I’ve been shipping apps and tools on nights and weekends since college.{' '}
+        <a href="#build-log">See the build log ↓</a>
       </p>
       <p class="links">
         <a href={`mailto:${SITE.email}`}>Email</a>
@@ -195,6 +207,27 @@ const nodeX = (i: number) => 60 + i * 160;
     </div>
   </section>
 
+  <section id="build-log" aria-labelledby="bl-h">
+    <header class="sec-head">
+      <div>
+        <h2 id="bl-h">Build log</h2>
+        <p class="sub">Things I made on my own time, because I wanted them to exist.</p>
+      </div>
+    </header>
+    <ol class="card log">
+      {buildLog.map((b) => (
+        <li>
+          <span class="yr">{b.year}</span>
+          <span class="entry">
+            <span class="nm">{b.href ? <a href={b.href}>{b.name} <span aria-hidden="true">↗</span></a> : b.name}</span>
+            <span class="wt">{b.what}</span>
+            <span class="st">{b.stack}</span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
   {writing.length > 0 && (
     <section id="writing" aria-labelledby="writing-h">
       <header class="sec-head">
@@ -217,18 +250,18 @@ const nodeX = (i: number) => 60 + i * 160;
   <section id="lineage" aria-labelledby="lineage-h">
     <header class="sec-head">
       <h2 id="lineage-h">Lineage</h2>
-      <span class="sec-label">Upstream of where I am now</span>
+      <span class="sec-label">Newest first</span>
     </header>
     <div class="lin-wrap">
       <div class="card table">
-        <svg class="lin-graph" viewBox="0 0 600 56" role="img" aria-label="Career lineage: UC San Diego, then Rauxa, then Indeed, then Replit">
+        <svg class="lin-graph" viewBox="0 0 600 56" role="img" aria-label="Career lineage, newest first: Replit, Indeed, Rauxa, UC San Diego">
           {lineage.slice(0, -1).map((_, i) => (
-            <path d={`M${nodeX(i) + 52} 28 C${nodeX(i) + 80} 28 ${nodeX(i + 1) - 80} 28 ${nodeX(i + 1) - 52} 28`} class={i === lineage.length - 2 ? 'e eA' : 'e'} />
+            <path d={`M${nodeX(i) + 52} 28 C${nodeX(i) + 80} 28 ${nodeX(i + 1) - 80} 28 ${nodeX(i + 1) - 52} 28`} class={i === 0 ? 'e eA' : 'e'} />
           ))}
           {lineage.map((l, i) => (
             <>
-              <rect x={nodeX(i) - 52} y="14" width="104" height="28" rx="7" class={i === lineage.length - 1 ? 'n nA' : 'n'} />
-              <text x={nodeX(i)} y="32" text-anchor="middle" class={i === lineage.length - 1 ? 't tA' : 't'}>{l.org}</text>
+              <rect x={nodeX(i) - 52} y="14" width="104" height="28" rx="7" class={i === 0 ? 'n nA' : 'n'} />
+              <text x={nodeX(i)} y="32" text-anchor="middle" class={i === 0 ? 't tA' : 't'}>{l.org}</text>
             </>
           ))}
         </svg>
@@ -262,6 +295,8 @@ const nodeX = (i: number) => 60 + i * 160;
   .hook strong { font-weight: 600; color: var(--accent); }
   .links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 1.1rem 0 0; font-size: 0.9rem; }
   .links a { padding-block: 0.4rem; }
+  .builder { margin: 0.6rem 0 0; max-width: 36rem; font-size: 0.95rem; color: var(--muted); }
+  .builder a { color: var(--ink); white-space: nowrap; }
   .intro-photo { width: 10rem; height: 12rem; object-fit: cover; object-position: 50% 30%; border-radius: 10px; }
 
   section + section { margin-top: 3.5rem; }
@@ -315,6 +350,18 @@ const nodeX = (i: number) => 60 + i * 160;
   .post:hover h3 { color: var(--accent); }
   .post :global(.signal) { margin-bottom: 1rem; }
 
+  /* Build log */
+  .log { list-style: none; margin: 0; padding: 0.4rem 1.5rem; }
+  .log li { display: grid; grid-template-columns: 4rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .log li:last-child { border-bottom: 0; }
+  .yr { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); padding-top: 0.2rem; }
+  .entry { display: grid; gap: 0.2rem; }
+  .nm { font-family: var(--serif); font-size: 1.15rem; }
+  .nm a { text-decoration: none; }
+  .nm a:hover { color: var(--accent); }
+  .wt { font-size: 0.9rem; color: var(--muted); }
+  .st { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+
   /* Lineage */
   .lin-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; align-items: start; }
   .table { padding: 1.1rem 1.5rem 0.4rem; }
@@ -349,11 +396,14 @@ const nodeX = (i: number) => 60 + i * 160;
   }
   @media (max-width: 560px) {
     .intro { grid-template-columns: 1fr; padding: 1.5rem; }
-    .intro-photo { order: -1; width: 6rem; height: 6rem; border-radius: 50%; }
+    .builder { margin: 0.6rem 0 0; max-width: 36rem; font-size: 0.95rem; color: var(--muted); }
+  .builder a { color: var(--ink); white-space: nowrap; }
+  .intro-photo { order: -1; width: 6rem; height: 6rem; border-radius: 50%; }
     .grid, .grid.two { grid-template-columns: 1fr; }
     .cps .card :global(.art) { display: none; }
     .lin-graph { display: none; }
     .tr { grid-template-columns: 1fr; gap: 0.2rem; }
+    .log li { grid-template-columns: 1fr; gap: 0.2rem; }
     .sec-label { display: none; }
     .contact .sec-label { display: block; }
     .lin-graph .t { font-size: 13px; }
