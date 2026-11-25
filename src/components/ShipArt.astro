@@ -41,6 +41,29 @@ const tx = 30 + 22 * 8.5;
 // metric: one consistent line through growth
 const metric = Array.from({ length: 30 }, (_, i) => [30 + i * 12, 170 - Math.pow(i / 29, 1.8) * 125 - (r() - 0.5) * 3] as [number, number]);
 
+// agent answer: bars
+const bars = [42, 55, 48, 61, 58, 74, 88];
+
+// threshold histogram: users by usage, threshold at bin 9
+const hist2 = Array.from({ length: 16 }, (_, i) => 18 + 110 * Math.exp(-((i - 5) ** 2) / 14) + r() * 8);
+const tBin = 9;
+
+// lineage DAG
+const nodes = {
+  stripe: [48, 45, 'billing', 30], credits: [48, 100, 'credits', 30], usage: [48, 155, 'usage', 30],
+  stg: [160, 72, 'stg_payments', 42], stg2: [160, 140, 'stg_usage', 42],
+  rev: [272, 100, 'fct_revenue', 40], arr: [358, 100, 'ARR', 24],
+} as Record<string, [number, number, string, number]>;
+const edges = [['stripe', 'stg'], ['credits', 'stg'], ['credits', 'stg2'], ['usage', 'stg2'], ['stg', 'rev'], ['stg2', 'rev'], ['rev', 'arr']];
+
+// enrichment matrix: accounts x fields, filled progressively by sources
+const cols = 9, rows = 5;
+const cells = Array.from({ length: rows * cols }, (_, i) => {
+  const c = i % cols, row = Math.floor(i / cols);
+  const filled = c < 3 || r() < 0.75 - c * 0.04;
+  return { x: 60 + c * 34, y: 30 + row * 30, filled, enriched: filled && c >= 3, top: row === 1 };
+});
+
 // forecast: history, then an uncertainty fan
 const hist = Array.from({ length: 20 }, (_, i) => [30 + i * 11, 120 - i * 1.2 + Math.sin(i / 1.6) * 14 + (r() - 0.5) * 8] as [number, number]);
 const [lx, ly] = hist[hist.length - 1];
@@ -50,11 +73,16 @@ const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1
   <rect width={W} height={H} class="bg" />
   {kind === 'agent' && (
     <>
-      <rect x="40" y="28" width="250" height="30" rx="15" class="bubble" />
-      <text x="58" y="48" class="mono">what drove signups last week?</text>
-      <path d={path(agentLine)} class="line" />
-      <circle cx={agentLine[agentLine.length - 1][0]} cy={agentLine[agentLine.length - 1][1]} r="5" class="dot" />
-      <line x1="40" y1="170" x2="370" y2="170" class="axis" />
+      <rect x="25" y="16" width="270" height="30" rx="15" class="bubble" />
+      <text x="41" y="36" class="mono">what drove signups last week?</text>
+      <rect x="25" y="62" width="300" height="122" rx="10" class="panel" />
+      {bars.map((h, i) => (
+        <rect x={45 + i * 38} y={168 - h} width="24" height={h} rx="3" class={i === bars.length - 1 ? 'barA' : 'bar'} />
+      ))}
+      <rect x="45" y="72" width="96" height="16" rx="8" class="chip" />
+      <text x="53" y="84" class="mono tiny">metric: signups</text>
+      <rect x="148" y="72" width="62" height="16" rx="8" class="chip" />
+      <text x="156" y="84" class="mono tiny">SQL ▸</text>
     </>
   )}
   {kind === 'classifier' && (
@@ -65,26 +93,35 @@ const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1
   )}
   {kind === 'threshold' && (
     <>
-      <line x1="30" y1="170" x2="375" y2="170" class="axis" />
-      <path d={path(sCurve)} class="line" />
-      <line x1={tx} y1="22" x2={tx} y2="170" class="dash" />
-      <circle cx={tx} cy={165 - 60} r="5.5" class="dot" />
-      <text x={tx + 10} y="36" class="mono small">upgrade prompt here</text>
+      {hist2.map((h, i) => (
+        <rect x={30 + i * 21.5} y={172 - h} width="17" height={h} rx="2" class={i >= tBin ? 'barA soft' : 'bar'} />
+      ))}
+      <line x1={30 + tBin * 21.5 - 2.5} y1="20" x2={30 + tBin * 21.5 - 2.5} y2="176" class="dash" />
+      <text x={30 + tBin * 21.5 + 6} y="32" class="mono small">prompt to upgrade →</text>
+      <line x1="25" y1="176" x2="375" y2="176" class="axis" />
     </>
   )}
   {kind === 'metric' && (
     <>
-      <path d={`${path(metric)} L${metric[metric.length - 1][0]} 175 L30 175 Z`} class="area" />
-      <path d={path(metric)} class="line" />
-      {[14, 23].map((i) => <circle cx={metric[i][0]} cy={metric[i][1]} r="5" class="dot" />)}
-      <text x="30" y="30" class="mono small">one definition · reproducible from raw data</text>
+      {edges.map(([f, t]) => {
+        const [x1, y1, , w1] = nodes[f], [x2, y2, , w2] = nodes[t];
+        const mx = (x1 + w1 + x2 - w2) / 2;
+        return <path d={`M${x1 + w1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2 - w2} ${y2}`} class={t === 'arr' ? 'edgeA' : 'edge'} />;
+      })}
+      {Object.entries(nodes).map(([k, [x, y, l, w]]) => (
+        <>
+          <rect x={x - w} y={y - 12} width={w * 2} height="24" rx="6" class={k === 'arr' ? 'nodeA' : 'node'} />
+          <text x={x} y={y + 4} text-anchor="middle" class={k === 'arr' ? 'mono tiny inv' : 'mono tiny'}>{l}</text>
+        </>
+      ))}
     </>
   )}
   {kind === 'leads' && (
     <>
-      {[300, 230, 165, 110].map((w, i) => (
-        <rect x={(W - w) / 2} y={30 + i * 38} width={w} height="26" rx="4" class={i === 3 ? 'barA' : 'bar'} />
+      {cells.map((c) => (
+        <rect x={c.x} y={c.y} width="28" height="22" rx="4" class={!c.filled ? 'empty' : c.top ? 'barA' : c.enriched ? 'cellE' : 'bar'} />
       ))}
+      <text x="60" y="188" class="mono small">product usage · + enrichment sources →</text>
     </>
   )}
   {kind === 'sql' && (
@@ -117,8 +154,19 @@ const fan = Array.from({ length: 12 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1
   .bubble { fill: var(--bg); stroke: var(--rule); }
   .bar { fill: var(--line); opacity: 0.35; }
   .barA { fill: var(--accent); }
+  .panel { fill: var(--bg); stroke: var(--rule); }
+  .chip { fill: var(--surface); stroke: var(--rule); }
+  .soft { opacity: 0.85; }
+  .edge { fill: none; stroke: var(--line); stroke-width: 1.5; }
+  .edgeA { fill: none; stroke: var(--accent); stroke-width: 2; }
+  .node { fill: var(--bg); stroke: var(--line); }
+  .nodeA { fill: var(--accent); }
+  .empty { fill: none; stroke: var(--rule); stroke-dasharray: 3 3; }
+  .cellE { fill: var(--line); opacity: 0.6; }
   .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; fill: var(--muted); }
   .mono.small { font-size: 11px; }
+  .mono.tiny { font-size: 9.5px; }
+  .inv { fill: var(--bg); font-weight: 600; }
   .mono.code { font-size: 15px; fill: var(--ink); }
   .kw { fill: var(--muted); }
   .hl { fill: var(--accent); }
