@@ -41,7 +41,9 @@ homepage after 5 resolved forecasts.
 - Homepage intro, selected work, side projects: `src/pages/index.astro`
 - Off the clock, lineage and contact: bottom of `src/pages/index.astro` (`/about` and `/now` redirect home)
 - Links, email, page title and meta description: `src/site.ts`
-- Link-preview image: `public/og.png`. Regenerate with `npm run build && npm run og` after changing the headline.
+- Link-preview image: `public/og.png`. Regenerate with `npm run og` after changing the tagline or headline.
+  It renders with Playwright, which isn't a project dependency (to keep deploys light). One-time setup:
+  `npm i --no-save playwright && npx playwright install chromium`.
 
 ## Deploy
 
