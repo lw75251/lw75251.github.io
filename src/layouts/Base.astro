@@ -18,8 +18,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.png', Astro.site);
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
+const showWriting = (await hasPublishedWriting()) || import.meta.env.DEV;
 const nav = [
-  ...((await hasPublishedWriting()) || import.meta.env.DEV ? [{ href: '/writing', label: 'Writing' }] : []),
+  ...(showWriting ? [{ href: '/writing', label: 'Writing' }] : []),
   ...(hasForecasts() || import.meta.env.DEV ? [{ href: '/forecasts', label: 'Forecasts' }] : []),
   { href: '/about', label: 'About' },
   { href: '/now', label: 'Now' },
@@ -31,7 +32,7 @@ const person = {
   name: SITE.name,
   url: Astro.site?.toString(),
   image: new URL('/leon.jpg', Astro.site).toString(),
-  jobTitle: 'Founding Data Scientist',
+  jobTitle: 'Founding Member of Technical Staff, Data',
   worksFor: { '@type': 'Organization', name: 'Replit', url: 'https://replit.com' },
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of California, San Diego' },
   knowsAbout: ['Product analytics', 'Growth and monetization', 'Pricing experiments', 'Revenue metrics', 'Forecasting', 'Statistics', 'AI tools for analytics'],
@@ -61,7 +62,7 @@ const person = {
     <meta name="theme-color" content="#151513" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    {showWriting && <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />}
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>
   <body>

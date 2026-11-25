@@ -11,20 +11,26 @@ const work = [
   {
     company: 'Replit',
     href: 'https://replit.com',
-    title: 'Founding Data Scientist',
-    what: 'Product analytics, growth and monetization: pricing tests, upgrade prompts, lead scoring, and the company’s revenue metrics. One of the first two people on the data team. I also led Oracle, our internal analytics agent, which over half the company uses every week and which replaced our seven-figure annual contracts with Hex and Amplitude.',
+    title: 'Founding Member of Technical Staff, Data (Staff)',
+    points: [
+      { text: 'Product analytics, growth and monetization: pricing tests, upgrade prompts and lead scoring. One of the first two people on the data team. I own the revenue metrics, kept consistent through two fundraises, and the billing and product data stack beneath them, from event instrumentation through dbt to reporting.' },
+      { lead: 'Oracle.', text: 'Led our internal analytics agent, from the agent harness to the semantic layer underneath. Over half the company uses it every week, and it replaced Hex and Amplitude, saving seven figures a year.' },
+    ],
   },
   {
     company: 'Indeed',
     href: 'https://www.indeed.com',
-    title: 'Senior Data Scientist, Finance',
-    what: 'Revenue forecasting for leadership, and customer lifetime-value models that guided marketing spend. Also prototyped Indeed’s Text-to-SQL assistant in early 2023; it grew into a 10-person team and a tool thousands of people used weekly.',
+    title: 'BI Analyst → Senior Data Scientist, Finance',
+    points: [
+      { text: 'Revenue forecasting for leadership, and customer lifetime-value models that guided marketing spend.' },
+      { lead: 'Text-to-SQL.', text: 'Prototyped Indeed’s Text-to-SQL assistant in January 2023. It grew into a 10-person team and a tool thousands of people used weekly.' },
+    ],
   },
   {
     company: 'Rauxa',
     href: 'https://www.rauxa.com',
     title: 'Data Scientist',
-    what: 'Marketing analytics, A/B testing and attribution for agency clients.',
+    points: [{ text: 'Marketing analytics, A/B testing and attribution for agency clients.' }],
   },
 ];
 
@@ -35,18 +41,19 @@ const built = [
 ---
 <Base>
   <section class="hero" aria-labelledby="name">
-    <h1 id="name" class="name">Leon Wu</h1>
-    <p class="kicker">Product · growth · revenue · AI for data</p>
+    <h1 id="name" class="visually-hidden">Leon Wu</h1>
+    <p class="kicker">Growth · monetization · AI for data</p>
     <p class="lede">
-      I find the numbers that change what a company builds and how it charges, then build <em>AI tools</em> so everyone else can find their own.
+      I work on the questions companies <em>make money on</em>: who uses the product, who should pay, and whether the
+      revenue number is right. Then I build AI tools so people can answer the next one without me.
     </p>
-    <Signal seed="hero" width={640} height={64} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
+    <figure class="hero-fig">
+      <Signal seed="hero" width={640} height={64} points={64} strokeWidth={1.5} dot={4.5} class="hero-signal" />
+      <figcaption>A random walk with one real shift. Most of my job is finding the dot.</figcaption>
+    </figure>
     <p class="bio">
-      I'm the founding data scientist at Replit, working on product analytics, growth and monetization. I own the
-      company's revenue metrics and have kept them consistent through two fundraises. Before that I was a finance data
-      scientist at Indeed, forecasting revenue and modeling customer value, and I built one of the first LLM
-      tools for asking data questions in plain English. I studied probability and statistics, so I don't trust a number
-      until I know where it came from.
+      I'm on Replit's founding data team. Before that, I did finance data science at Indeed. I studied probability and
+      statistics, so I don't trust a number until I know where it came from.
     </p>
   </section>
 
@@ -57,7 +64,9 @@ const built = [
         <li>
           <div class="row">
             <span class="title"><a href={w.href} class="co">{w.company}</a> <span class="role">{w.title}</span></span>
-            <span class="desc">{w.what}</span>
+            {w.points.map((pt) => (
+              <span class="desc">{pt.lead && <strong>{pt.lead} </strong>}{pt.text}</span>
+            ))}
           </div>
         </li>
       ))}
@@ -111,17 +120,20 @@ const built = [
   <section aria-labelledby="hello">
     <h2 class="kicker" id="hello">Get in touch</h2>
     <p>
-      Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or find me on <a href={SITE.linkedin}>LinkedIn</a>.
-      My resume is <a href={RESUME_MAILTO}>one email away</a>.
+      Happy to talk pricing, experimentation, evals or agent harnesses. Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' '}
+      or find me on <a href={SITE.linkedin}>LinkedIn</a>. My resume is <a href={RESUME_MAILTO}>one email away</a>.
     </p>
   </section>
 </Base>
 
 <style>
-  .name { font-size: 1rem; font-family: var(--sans); font-weight: 600; letter-spacing: 0; margin: 0 0 0.35rem; }
   .hero .kicker { margin-bottom: 1.5rem; }
-  .hero .lede { max-width: 35rem; }
-  .hero :global(.hero-signal) { width: 100%; height: auto; margin: 2.25rem 0 2rem; color: var(--line); }
+  .hero .lede { max-width: 36rem; }
+  .hero-fig { margin: 2.25rem 0 2rem; }
+  .hero :global(.hero-signal) { width: 100%; height: auto; color: var(--line); }
+  .hero-fig figcaption { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.6rem; text-align: right; }
+  .jobs .desc strong { color: var(--ink); font-weight: 600; }
+  .jobs .desc + .desc { margin-top: 0.5rem; }
   .bio { margin: 0; max-width: 35rem; color: var(--muted); }
   .jobs .co { display: inline; padding: 0; text-decoration: none; }
   .jobs .role { font-family: var(--sans); font-size: 0.92rem; color: var(--muted); margin-left: 0.4rem; }
