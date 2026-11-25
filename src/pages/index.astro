@@ -113,7 +113,7 @@ const buildLog = [
 ];
 
 const lineage = [
-  { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.' },
+  { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse, with a daily freshness SLA on core metrics.' },
   { org: 'Indeed', role: 'Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
   { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
   { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
@@ -256,10 +256,17 @@ const nodeX = (i: number) => 60 + i * 160;
           </div>
         ))}
       </div>
+      <div class="side">
       <div class="card contact">
-        <p class="sec-label">Contact</p>
-        <p class="say"><a href={`mailto:${SITE.email}`}>Have a question worth asking? ↗</a></p>
-        <p class="small">{SITE.email}<br /><a href={SITE.linkedin}>LinkedIn</a> · <a href={RESUME_MAILTO}>Resume on request</a></p>
+          <p class="sec-label">Contact</p>
+          <p class="say"><a href={`mailto:${SITE.email}`}>Have a question worth asking? ↗</a></p>
+          <p class="small">{SITE.email}<br /><a href={SITE.linkedin}>LinkedIn</a> · <a href={RESUME_MAILTO}>Resume on request</a></p>
+        </div>
+        <div class="card offclock">
+          <p class="sec-label">Off the clock</p>
+          <p>Grew up in New Jersey, studied probability and statistics at UC San Diego, and came back to New York.</p>
+          <p>Chess, guitar, League of Legends and Riftbound. Lakers, Man City and Broncos, which is a lot of emotional variance.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -359,6 +366,9 @@ const nodeX = (i: number) => 60 + i * 160;
   .org { font-family: var(--serif); font-size: 1.1rem; }
   .r { display: block; font-size: 0.92rem; }
   .w { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
+  .side { display: grid; gap: 1rem; }
+  .offclock { padding: 1.25rem 1.5rem; }
+  .offclock p:not(.sec-label) { font-size: 0.88rem; color: var(--muted); margin: 0.6rem 0 0; line-height: 1.55; }
   .contact { background: #1c1b19; color: #ebe8e1; border-color: #1c1b19; padding: 1.5rem; }
   .contact .sec-label { color: #a3a097; }
   .say { font-family: var(--serif); font-size: 1.5rem; line-height: 1.25; margin: 1.1rem 0 0.6rem; }

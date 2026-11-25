@@ -12,6 +12,8 @@ const hasForecasts = FORECASTS.some((f) => !f.example);
 
 export default defineConfig({
   site: 'https://lw75251.github.io',
+  // The About and Now pages were folded into the homepage; keep old links working.
+  redirects: { '/about': '/', '/now': '/' },
   integrations: [
     sitemap({
       filter: (page) =>

@@ -23,8 +23,6 @@ const showWriting = (await hasPublishedWriting()) || import.meta.env.DEV;
 const nav = [
   ...(showWriting ? [{ href: '/writing', label: 'Writing' }] : []),
   ...(hasForecasts() || import.meta.env.DEV ? [{ href: '/forecasts', label: 'Forecasts' }] : []),
-  { href: '/about', label: 'About' },
-  { href: '/now', label: 'Now' },
 ];
 
 const person = {

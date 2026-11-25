@@ -39,8 +39,7 @@ homepage after 5 resolved forecasts.
 ## Other content
 
 - Homepage intro, selected work, side projects: `src/pages/index.astro`
-- About + off-the-clock: `src/pages/about.astro`
-- Now page (update it monthly): `src/pages/now.astro`
+- Off the clock, lineage and contact: bottom of `src/pages/index.astro` (`/about` and `/now` redirect home)
 - Links, email, page title and meta description: `src/site.ts`
 - Link-preview image: `public/og.png`. Regenerate with `npm run build && npm run og` after changing the headline.
 
