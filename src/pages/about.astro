@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, RESUME_MAILTO } from '../site';
+
+const built = [
+  { name: 'Quairy', href: 'https://github.com/lw75251/datasetai', what: 'An early Text-to-SQL agent from 2023 (ReAct plus retrieval) that also answers questions over messy, multi-table spreadsheets.' },
+  { name: 'AI Solution Explorer', href: 'https://github.com/lw75251/ai_solutions_generator', what: 'Generates candidate approaches to a hard problem with Claude, then scores each one for feasibility and risk.' },
+];
+---
+<Base title="About" description="About Leon Wu: staff data scientist for growth, monetization and revenue at Replit, who rebuilt and scaled Oracle, its internal analytics agent.">
+  <div class="about">
+    <img src="/leon.jpg" alt="Portrait of Leon Wu" width="667" height="1000" class="photo" />
+    <div>
+      <h1>About</h1>
+      <div class="prose">
+        <p>
+          I grew up in New Jersey, went west to UC San Diego, and came back to New York. I started out in
+          finance and business, found programming, and ended up with a degree in probability and statistics.
+          That combination still shapes how I work: I start from the question, not the model.
+        </p>
+        <p>
+          My day job is the questions companies make money on: what users actually do, who should pay, at what price,
+          and whether the revenue number is right. I did that for agency clients at Rauxa, for finance at Indeed (revenue
+          forecasts and customer lifetime value), and now for product, growth and monetization at Replit, where I was one
+          of the first two people on the data team. There that means pricing tests, upgrade prompts, lead scoring, and
+          the company's revenue metrics.
+        </p>
+        <p>
+          The other half of my work is making that kind of answer self-serve. At Indeed I prototyped a Text-to-SQL
+          assistant in January 2023, and it grew into a 10-person team. At Replit I took Oracle, our internal analytics agent, from an early idea to something most of the company relies on, rebuilding much of it from the ground up, including its agent harness.
+          It sits on a semantic layer the whole company agrees on, and it replaced Hex and Amplitude, saving seven figures a year.
+        </p>
+        <p>
+          Underneath both is data engineering, which I do a lot of. At Replit I own billing and product data end to end:
+          event instrumentation, 1,000+ dbt models on a petabyte-scale warehouse, and a daily freshness SLA on the
+          metrics leadership looks at. At Indeed I raised the revenue data mart's monthly SLA compliance from 60% to 95%,
+          and built a self-serve forecasting platform on SageMaker and MLflow that 20+ teams used to run 2,000+ models.
+        </p>
+        <p class="stack">
+          BigQuery · ClickHouse · Snowflake · dbt · Airflow · Pub/Sub · Segment · Python · SQL · TypeScript
+        </p>
+        <p>
+          The work I'm proudest of rarely looks like a model. It's usually one well-framed question, a careful
+          look at what users actually do, and a tool that means nobody has to ask me again.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section aria-labelledby="built">
+    <h2 class="kicker" id="built">Side projects</h2>
+    <ul class="entries">
+      {built.map((b) => (
+        <li>
+          <a href={b.href}>
+            <span class="title">{b.name}</span>
+            <span class="meta">GitHub ↗</span>
+            <span class="desc">{b.what}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section aria-labelledby="off">
+    <h2 class="kicker" id="off">Off the clock</h2>
+    <p>
+      Chess, guitar, and too many hours of League of Legends and Riftbound. I'm a Lakers, Man City and Broncos fan, which
+      is a lot of emotional variance to carry.
+    </p>
+  </section>
+
+  <section aria-labelledby="contact">
+    <h2 class="kicker" id="contact">Contact</h2>
+    <p>
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' · '}<a href={SITE.linkedin}>LinkedIn</a>{' · '}<a href={SITE.github}>GitHub</a>{' · '}<a href={RESUME_MAILTO}>Request my resume</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .about + section { margin-top: 4.5rem; }
+  .stack { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); line-height: 1.8; }
+  .about { display: grid; grid-template-columns: 9rem 1fr; gap: 2rem; align-items: start; }
+  .photo { width: 100%; height: auto; border-radius: 6px; filter: grayscale(0.15); }
+  .about h1 { margin-bottom: 1.5rem; }
+  .about .prose { font-size: 1.15rem; }
+  @media (max-width: 560px) {
+    .about { grid-template-columns: 1fr; }
+    .photo { width: 7rem; }
+  }
+</style>

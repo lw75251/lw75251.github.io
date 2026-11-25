@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import Signal from '../../components/Signal.astro';
+import { getWriting, formatDate } from '../../site';
+
+const writing = await getWriting();
+---
+<Base title="Writing" description="Essays by Leon Wu on data, statistics and agents." noindex={writing.length === 0}>
+  <h1>Writing</h1>
+  <p class="muted sub">Essays on data, statistics and building with agents. Also available as <a href="/rss.xml">RSS</a>.</p>
+  {writing.length > 0 ? (
+    <ul class="entries">
+      {writing.map((p) => (
+        <li>
+          <a href={`/writing/${p.id}/`}>
+            <span class="sig">
+              <Signal seed={p.id} />
+              <span class="title">{p.data.title}{p.data.draft && <span class="meta"> · draft</span>}</span>
+            </span>
+            <span class="meta">{formatDate(p.data.date)}</span>
+            <span class="desc">{p.data.description}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="muted">Nothing here yet.</p>
+  )}
+</Base>
+
+<style>
+  .sub { margin: 1rem 0 2.5rem; }
+</style>

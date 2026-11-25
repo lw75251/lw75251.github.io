@@ -1,0 +1,193 @@
+---
+/**
+ * Small generated illustrations used as card art for shipped work, so the
+ * site needs no screenshots of internal tools. Deterministic per kind.
+ */
+type Kind = 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
+interface Props { kind: Kind; label: string }
+const { kind, label } = Astro.props;
+
+function rng(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const W = 400, H = 200;
+const r = rng(kind.length * 9973 + kind.charCodeAt(0));
+const path = (pts: [number, number][]) => pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
+
+// agent: weekly signups by source, stacked bars
+const weeks = Array.from({ length: 7 }, (_, i) => [28 + i * 3 + r() * 6, 18 + i * 2 + r() * 6, 10 + r() * 6]);
+const chips: { t: string; w: number; x: number }[] = [];
+for (const [t, w] of [['metric: signups', 128], ['excludes internal', 142], ['SQL ▸', 52]] as [string, number][]) {
+  const prev = chips[chips.length - 1];
+  chips.push({ t, w, x: prev ? prev.x + prev.w + 6 : 40 });
+}
+
+// classifier: first messages sorted into two columns, one ambiguous
+const build = ['make a todo app', 'website for my bakery', 'clone a habit tracker'];
+const talk = ['explain this error', 'help me plan a trip', 'what is recursion?'];
+
+// threshold: conversion rate rises with usage; cutoff where it bends
+const usageBins = Array.from({ length: 16 }, (_, i) => 14 + 70 * Math.exp(-((i - 4) ** 2) / 12) + r() * 6);
+const conv = Array.from({ length: 41 }, (_, i) => {
+  const x = 30 + i * 8.5, t = (i - 20) / 3.5;
+  return [x, 160 - 115 / (1 + Math.exp(-t))] as [number, number];
+});
+const tIdx = 15;
+const tx = 30 + tIdx * 8.5;
+
+// lineage DAG
+const nodes = {
+  stripe: [46, 45, 'billing', 34], credits: [46, 100, 'credits', 34], usage: [46, 155, 'usage', 34],
+  stg: [163, 72, 'stg_payments', 50], stg2: [163, 140, 'stg_usage', 50],
+  rev: [282, 100, 'fct_revenue', 48], arr: [362, 100, 'ARR', 24],
+} as Record<string, [number, number, string, number]>;
+const edges = [['stripe', 'stg'], ['credits', 'stg'], ['credits', 'stg2'], ['usage', 'stg2'], ['stg', 'rev'], ['stg2', 'rev'], ['rev', 'arr']];
+
+// leads funnel
+const funnel = [['all accounts', 320], ['enriched', 250], ['product-qualified', 170], ['to sales', 100]] as [string, number][];
+
+// forecast: history, then an uncertainty fan that stays inside the frame
+const hist = Array.from({ length: 18 }, (_, i) => [30 + i * 12, 118 - i * 1.2 + Math.sin(i / 1.6) * 14 + (r() - 0.5) * 8] as [number, number]);
+const [lx, ly] = hist[hist.length - 1];
+const fan = Array.from({ length: 10 }, (_, i) => [lx + (i + 1) * 12, ly - (i + 1) * 1.5, (i + 1) * 3.6] as [number, number, number]);
+---
+<svg class="art" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={label} preserveAspectRatio="xMidYMid meet">
+  <rect width={W} height={H} class="bg" />
+  {kind === 'agent' && (
+    <>
+      <rect x="25" y="14" width="235" height="28" rx="14" class="bubble" />
+      <text x="40" y="32" class="mono">weekly signups by source?</text>
+      <rect x="25" y="52" width="350" height="134" rx="10" class="panel" />
+      {chips.map((c) => (
+        <>
+          <rect x={c.x} y="61" width={c.w} height="20" rx="10" class="chip" />
+          <text x={c.x + 10} y="75" class="mono tiny">{c.t}</text>
+        </>
+      ))}
+      {weeks.map((w, i) => {
+        const x = 52 + i * 44; let y = 176;
+        return w.map((h, j) => { y -= h; return <rect x={x} y={y} width="28" height={h - 1.5} rx="2" class={i === weeks.length - 1 ? ['barA', 'barA2', 'barA3'][j] : ['bar', 'bar2', 'bar3'][j]} />; });
+      })}
+    </>
+  )}
+  {kind === 'classifier' && (
+    <>
+      <text x="22" y="26" class="mono small">wants something built</text>
+      <text x="208" y="26" class="mono small">wants a conversation</text>
+      {build.map((t, i) => (
+        <>
+          <rect x="22" y={36 + i * 30} width="172" height="24" rx="12" class="bubble" />
+          <text x="33" y={52 + i * 30} class="mono tiny">{t}</text>
+        </>
+      ))}
+      {talk.map((t, i) => (
+        <>
+          <rect x="208" y={36 + i * 30} width="172" height="24" rx="12" class="bubbleA" />
+          <text x="219" y={52 + i * 30} class="mono tiny">{t}</text>
+        </>
+      ))}
+      <rect x="112" y="134" width="176" height="26" rx="13" class="ambig" />
+      <text x="200" y="151" text-anchor="middle" class="mono tiny">build me a budget… ?</text>
+      <text x="200" y="184" text-anchor="middle" class="mono tiny muted">ambiguous: the rubric decides</text>
+    </>
+  )}
+  {kind === 'threshold' && (
+    <>
+      {usageBins.map((h, i) => (
+        <rect x={30 + i * 21.5} y={176 - h} width="17" height={h} rx="2" class="bar faint" />
+      ))}
+      <line x1="25" y1="176" x2="375" y2="176" class="axis" />
+      <path d={path(conv)} class="line" />
+      <line x1={tx} y1="22" x2={tx} y2="176" class="dash" />
+      <circle cx={tx} cy={conv[tIdx][1]} r="5" class="dot" />
+      <text x={tx - 8} y="32" text-anchor="end" class="mono small">upgrade prompt</text>
+      <text x="372" y="30" text-anchor="end" class="mono tiny muted">Pro conversion</text>
+      <text x="30" y="192" class="mono tiny muted">usage →</text>
+    </>
+  )}
+  {kind === 'metric' && (
+    <>
+      {edges.map(([f, t]) => {
+        const [x1, y1, , w1] = nodes[f], [x2, y2, , w2] = nodes[t];
+        const mx = (x1 + w1 + x2 - w2) / 2;
+        return <path d={`M${x1 + w1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2 - w2} ${y2}`} class={t === 'arr' ? 'edgeA' : 'edge'} />;
+      })}
+      {Object.entries(nodes).map(([k, [x, y, l, w]]) => (
+        <>
+          <rect x={x - w} y={y - 13} width={w * 2} height="26" rx="6" class={k === 'arr' ? 'nodeA' : 'node'} />
+          <text x={x} y={y + 4} text-anchor="middle" class={k === 'arr' ? 'mono tiny inv' : 'mono tiny'}>{l}</text>
+        </>
+      ))}
+    </>
+  )}
+  {kind === 'leads' && (
+    <>
+      {funnel.map(([l, w], i) => (
+        <>
+          <rect x={(W - w) / 2} y={22 + i * 41} width={w} height="31" rx="5" class={i === funnel.length - 1 ? 'barA' : 'bar'} />
+          <text x={W / 2} y={42 + i * 41} text-anchor="middle" class={i === funnel.length - 1 ? 'mono small inv' : 'mono small ink'}>{l}</text>
+        </>
+      ))}
+    </>
+  )}
+  {kind === 'sql' && (
+    <>
+      <rect x="25" y="14" width="350" height="28" rx="14" class="bubble" />
+      <text x="40" y="32" class="mono">weekly active users, excluding internal?</text>
+      <text x="40" y="78" class="mono code"><tspan class="kw">select</tspan> week, count(distinct user_id)</text>
+      <text x="40" y="104" class="mono code"><tspan class="kw">from</tspan> events</text>
+      <text x="40" y="130" class="mono code"><tspan class="kw">where</tspan> <tspan class="hl">not is_internal_user</tspan></text>
+      <text x="40" y="156" class="mono code"><tspan class="kw">group by</tspan> week</text>
+    </>
+  )}
+  {kind === 'forecast' && (
+    <>
+      <path d={`M${lx} ${ly} ${fan.map(([x, y, s]) => `L${x} ${y - s}`).join(' ')} ${[...fan].reverse().map(([x, y, s]) => `L${x} ${y + s}`).join(' ')} Z`} class="area" />
+      <path d={path(hist)} class="line" />
+      <path d={path([[lx, ly], ...fan.map(([x, y]) => [x, y] as [number, number])])} class="dash" />
+      <circle cx={lx} cy={ly} r="5" class="dot" />
+      <line x1="25" y1="176" x2="375" y2="176" class="axis" />
+    </>
+  )}
+</svg>
+
+<style>
+  .art { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; background: var(--surface); }
+  .bg { fill: var(--surface); }
+  .line { fill: none; stroke: var(--muted); stroke-width: 1.75; stroke-linejoin: round; stroke-linecap: round; }
+  .dash { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 4 5; }
+  .axis { stroke: var(--rule); stroke-width: 1.5; }
+  .dot { fill: var(--accent); }
+  .area { fill: var(--accent); opacity: 0.12; }
+  .bubble { fill: var(--bg); stroke: var(--rule); }
+  .bubbleA { fill: color-mix(in srgb, var(--accent) 12%, var(--bg)); stroke: color-mix(in srgb, var(--accent) 45%, var(--rule)); }
+  .ambig { fill: var(--bg); stroke: var(--line); stroke-dasharray: 4 3; }
+  .panel { fill: var(--bg); stroke: var(--rule); }
+  .chip { fill: var(--surface); stroke: var(--rule); }
+  .bar { fill: var(--line); opacity: 0.45; }
+  .bar2 { fill: var(--line); opacity: 0.3; }
+  .bar3 { fill: var(--line); opacity: 0.18; }
+  .faint { opacity: 0.22; }
+  .barA { fill: var(--accent); }
+  .barA2 { fill: var(--accent); opacity: 0.65; }
+  .barA3 { fill: var(--accent); opacity: 0.35; }
+  .edge { fill: none; stroke: var(--line); stroke-width: 1.5; }
+  .edgeA { fill: none; stroke: var(--accent); stroke-width: 2; }
+  .node { fill: var(--bg); stroke: var(--line); }
+  .nodeA { fill: var(--accent); }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; fill: var(--muted); }
+  .mono.small { font-size: 13px; }
+  .mono.tiny { font-size: 12px; fill: var(--ink); }
+  .mono.muted { fill: var(--muted); }
+  .mono.ink { fill: var(--ink); }
+  .mono.code { font-size: 14px; fill: var(--ink); }
+  .inv { fill: var(--bg) !important; font-weight: 600; }
+  .kw { fill: var(--muted); }
+  .hl { fill: var(--accent); }
+</style>

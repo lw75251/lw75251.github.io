@@ -1,0 +1,361 @@
+---
+import Base from '../layouts/Base.astro';
+import Signal from '../components/Signal.astro';
+import ShipArt from '../components/ShipArt.astro';
+import { SITE, RESUME_MAILTO, getWriting, formatDate } from '../site';
+
+const allWriting = await getWriting();
+const writing = allWriting.slice(0, 4);
+const published = new Set(allWriting.map((p) => p.id));
+
+type Point = {
+  where: string;
+  title: string;
+  q: string;
+  found: string;
+  effect: string;
+  stat: string;
+  basis: string;
+  how: string;
+  stack: string;
+  essay?: string;
+  art: 'agent' | 'classifier' | 'threshold' | 'metric' | 'leads' | 'sql' | 'forecast';
+};
+
+const featured: Point = {
+  where: 'Replit · AI for data',
+  title: 'Oracle',
+  q: 'What would let most of the company answer its own data questions?',
+  found: 'An agent restricted to a semantic layer everyone agrees on, that shows the metric and SQL behind every number.',
+  effect: 'I rebuilt much of it from the ground up, including the agent harness, and scaled it across the company. It replaced Hex and Amplitude, saving seven figures a year.',
+  stat: '>50% of company',
+  basis: 'uses it every week',
+  how: 'Agent harness in Python and TypeScript over the semantic layer; answers cite the governed metric and the query.',
+  stack: 'Python · TypeScript · semantic layer · dbt',
+  essay: 'definitions-not-models',
+  art: 'agent',
+};
+
+const points: Point[] = [
+  {
+    where: 'Replit · Product research',
+    title: 'What new users actually wanted',
+    q: 'What do new users ask for first?',
+    found: 'A large share wanted a conversation, not an app.',
+    effect: 'Replit rebuilt its product around conversation.',
+    stat: 'product rebuilt',
+    basis: 'around conversation',
+    how: 'An LLM pipeline classified first messages, tuned against human-labeled evals before it touched the full dataset.',
+    stack: 'LLM pipeline · human-labeled evals · Python',
+    essay: 'they-wanted-a-conversation',
+    art: 'classifier',
+  },
+  {
+    where: 'Replit · Monetization',
+    title: 'Pro upgrade prompt',
+    q: 'When is a free user worth asking to upgrade?',
+    found: 'Past one usage level, free users start converting like Pro users.',
+    effect: 'An in-product upgrade prompt that fires at that level.',
+    stat: '5x',
+    basis: 'Pro conversions, A/B tested',
+    how: 'Found the threshold in usage data, then A/B tested the prompt. Also tested Agent pricing across credit exhaustion, trials and model mix.',
+    stack: 'Experimentation · SQL · Python',
+    essay: 'the-threshold',
+    art: 'threshold',
+  },
+  {
+    where: 'Replit · Finance',
+    title: 'One ARR',
+    q: 'What is our revenue, exactly?',
+    found: 'With credits, trials and usage pricing, ARR is a policy decision, not arithmetic.',
+    effect: 'One definition, and the revenue and investor metrics built on it.',
+    stat: 'one ARR',
+    basis: 'through two fundraises',
+    how: 'Defined once in the billing and product data stack I own end to end, from event instrumentation through dbt to reporting.',
+    stack: 'dbt · SQL · billing data',
+    essay: 'one-arr',
+    art: 'metric',
+  },
+  {
+    where: 'Replit · Sales',
+    title: 'Product-qualified leads',
+    q: 'Which accounts are ready for sales?',
+    found: 'Product usage signals readiness, once it’s tied to the company behind it.',
+    effect: 'A lead score with waterfall enrichment from third-party sources.',
+    stat: '~65%',
+    basis: 'of enterprise pipeline',
+    how: 'Scored accounts on product usage, then filled in company data from several third-party sources in a waterfall.',
+    stack: 'SQL · Python · third-party enrichment',
+    art: 'leads',
+  },
+  {
+    where: 'Indeed · AI for data',
+    title: 'Text-to-SQL assistant',
+    q: 'Can non-technical people query data themselves?',
+    found: 'Yes, once the business rules are standardized across orgs.',
+    effect: 'Prototyped on OpenAI’s API in January 2023. It grew into a 10-person team.',
+    stat: '2,000+',
+    basis: 'weekly users, incl. leadership',
+    how: 'Led system design, development and demos; the hard part was agreeing on business rules, not generating SQL.',
+    stack: 'OpenAI API · agents · RAG · SQL',
+    art: 'sql',
+  },
+  {
+    where: 'Indeed · Forecasting',
+    title: 'Self-serve forecasting',
+    q: 'Could every team build its own forecasts?',
+    found: 'Yes, with one shared pipeline handling tuning, caching and monitoring.',
+    effect: 'A self-serve forecasting app on SageMaker and MLflow.',
+    stat: '2,000+ models',
+    basis: 'built by 20+ teams',
+    how: 'ML pipelines on SageMaker with MLflow monitoring and hyperparameter tuning built in.',
+    stack: 'Python · Prophet · SageMaker · MLflow',
+    art: 'forecast',
+  },
+];
+
+const lineage = [
+  { org: 'UC San Diego', role: 'B.S. Probability & Statistics', what: 'Minors in Computer Science and Business.' },
+  { org: 'Rauxa', role: 'Data Scientist', what: 'Marketing analytics, A/B testing and real-time data apps for agency clients.' },
+  { org: 'Indeed', role: 'Senior Data Scientist, Finance', what: 'Revenue forecasting, lifetime-value models, and the revenue data mart (SLA compliance from 60% to 95%).' },
+  { org: 'Replit', role: 'Founding Member of Technical Staff, Data (Staff)', what: 'Growth, monetization and revenue. Billing and product data, from event instrumentation through 1,000+ dbt models on a petabyte-scale warehouse.' },
+];
+const nodeX = (i: number) => 60 + i * 160;
+---
+<Base wide quietFooter>
+  <section class="intro card" aria-labelledby="name">
+    <div class="intro-text">
+      <h1 id="name">Leon Wu</h1>
+      <p class="role">Staff Data Scientist · Early Replit</p>
+      <p class="hook">
+        Rebuilt and scaled <strong>Oracle</strong>, Replit’s internal analytics agent. I also own growth, monetization and revenue
+        analytics, and the data stack underneath. Previously at Indeed.
+      </p>
+      <p class="links">
+        <a href={`mailto:${SITE.email}`}>Email</a>
+        <a href={SITE.linkedin}>LinkedIn</a>
+        <a href={SITE.github}>GitHub</a>
+        <a href={RESUME_MAILTO}>Resume</a>
+      </p>
+    </div>
+    <img src="/leon.jpg" alt="Portrait of Leon Wu" width="667" height="1000" class="intro-photo" />
+  </section>
+
+  <section id="changepoints" aria-labelledby="cp-h">
+    <header class="sec-head">
+      <div>
+        <h2 id="cp-h">Changepoints</h2>
+        <p class="sub">Where the line moved because of my work. Click a card for how I knew.</p>
+      </div>
+    </header>
+
+    <article class="card featured">
+      <ShipArt kind={featured.art} label="Illustration: a question answered with a chart, showing the metric and SQL behind it" />
+      <div class="body">
+        <p class="where">{featured.where}</p>
+        <h3>{featured.title}</h3>
+        <dl class="qfe">
+          <dt>Q</dt><dd class="q">{featured.q}</dd>
+          <dt>Found</dt><dd>{featured.found}</dd>
+          <dt>Effect</dt><dd>{featured.effect}</dd>
+          <dt>How</dt><dd>{featured.how}</dd>
+        </dl>
+        <p class="stack">{featured.stack}</p>
+        {featured.essay && published.has(featured.essay) && <p class="read"><a href={`/writing/${featured.essay}/`}>Read the full story →</a></p>}
+        <p class="stat"><span class="dotmark" aria-hidden="true"></span><strong>{featured.stat}</strong> <span>{featured.basis}</span></p>
+      </div>
+    </article>
+
+    <div class="grid cps">
+      {points.map((p) => (
+        <details class="card point" name="changepoint">
+          <summary>
+            <ShipArt kind={p.art} label={`Illustration for ${p.title}`} />
+            <div class="body">
+              <p class="where">{p.where}</p>
+              <h3>{p.title}</h3>
+              <p class="q">{p.q}</p>
+              <p class="stat">
+                <span class="dotmark" aria-hidden="true"></span><strong>{p.stat}</strong> <span>{p.basis}</span>
+                <span class="toggle" aria-hidden="true"></span>
+              </p>
+            </div>
+          </summary>
+          <div class="more">
+            <dl class="qfe">
+              <dt>Found</dt><dd>{p.found}</dd>
+              <dt>Effect</dt><dd>{p.effect}</dd>
+              <dt>How</dt><dd>{p.how}</dd>
+            </dl>
+            <p class="stack">{p.stack}</p>
+            {p.essay && published.has(p.essay) && <p class="read"><a href={`/writing/${p.essay}/`}>Read the full story →</a></p>}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  {writing.length > 0 && (
+    <section id="writing" aria-labelledby="writing-h">
+      <header class="sec-head">
+        <h2 id="writing-h">Writing</h2>
+        <a class="sec-label" href="/writing">All essays →</a>
+      </header>
+      <div class="grid two">
+        {writing.map((p) => (
+          <a class="card post" href={`/writing/${p.id}/`}>
+            <Signal seed={p.id} width={140} height={32} points={36} />
+            <p class="where">{formatDate(p.data.date)}</p>
+            <h3>{p.data.title}</h3>
+            <p class="what">{p.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section id="lineage" aria-labelledby="lineage-h">
+    <header class="sec-head">
+      <h2 id="lineage-h">Lineage</h2>
+      <span class="sec-label">Upstream of where I am now</span>
+    </header>
+    <div class="lin-wrap">
+      <div class="card table">
+        <svg class="lin-graph" viewBox="0 0 600 56" role="img" aria-label="Career lineage: UC San Diego, then Rauxa, then Indeed, then Replit">
+          {lineage.slice(0, -1).map((_, i) => (
+            <path d={`M${nodeX(i) + 52} 28 C${nodeX(i) + 80} 28 ${nodeX(i + 1) - 80} 28 ${nodeX(i + 1) - 52} 28`} class={i === lineage.length - 2 ? 'e eA' : 'e'} />
+          ))}
+          {lineage.map((l, i) => (
+            <>
+              <rect x={nodeX(i) - 52} y="14" width="104" height="28" rx="7" class={i === lineage.length - 1 ? 'n nA' : 'n'} />
+              <text x={nodeX(i)} y="32" text-anchor="middle" class={i === lineage.length - 1 ? 't tA' : 't'}>{l.org}</text>
+            </>
+          ))}
+        </svg>
+        {lineage.map((b) => (
+          <div class="tr">
+            <span class="org">{b.org}</span>
+            <span><span class="r">{b.role}</span><span class="w">{b.what}</span></span>
+          </div>
+        ))}
+      </div>
+      <div class="card contact">
+        <p class="sec-label">Contact</p>
+        <p class="say"><a href={`mailto:${SITE.email}`}>Have a question worth asking? ↗</a></p>
+        <p class="small">{SITE.email}<br /><a href={SITE.linkedin}>LinkedIn</a> · <a href={RESUME_MAILTO}>Resume on request</a></p>
+      </div>
+    </div>
+  </section>
+
+  <p class="colophon">Charts on this page are illustrations. The numbers in the text are real.</p>
+</Base>
+
+<style>
+  main { padding-top: 2.5rem; }
+  .card { background: color-mix(in srgb, var(--surface) 55%, var(--bg)); border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; }
+
+  /* Intro */
+  .intro { display: grid; grid-template-columns: 1fr 10rem; gap: 2rem; padding: 2rem 2.25rem; align-items: center; }
+  .intro h1 { font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem); }
+  .role { font-size: 0.95rem; color: var(--muted); margin: 0.6rem 0 0; }
+  .hook { margin: 0.4rem 0 0; max-width: 36rem; }
+  .hook strong { font-weight: 600; color: var(--accent); }
+  .links { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 1.1rem 0 0; font-size: 0.9rem; }
+  .links a { padding-block: 0.4rem; }
+  .intro-photo { width: 10rem; height: 12rem; object-fit: cover; object-position: 50% 30%; border-radius: 10px; }
+
+  section + section { margin-top: 3.5rem; }
+  .sec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.1rem; }
+  .sec-head h2 { font-size: 1.75rem; }
+  .sec-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  a.sec-label { text-decoration: none; }
+
+  .sub { font-size: 0.92rem; color: var(--muted); margin: 0.35rem 0 0; }
+
+  /* Cards */
+  .body, .post { padding: 1.1rem 1.25rem 1.2rem; }
+  .cps { align-items: start; }
+  .point summary { list-style: none; cursor: pointer; display: block; }
+  .point summary::-webkit-details-marker { display: none; }
+  .point summary:hover h3 { color: var(--accent); }
+  .point summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 14px; }
+  .point .q { font-family: var(--serif); font-style: italic; font-size: 1rem; color: var(--ink); margin: 0.4rem 0 0; }
+  .point .stat { margin-top: 0.9rem; }
+  .toggle { margin-left: auto; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .toggle::after { content: 'How I knew +'; }
+  .point[open] .toggle::after { content: 'Close −'; }
+  .point[open] { border-color: color-mix(in srgb, var(--accent) 40%, var(--rule)); }
+  .more { padding: 0 1.25rem 1.25rem; }
+  .more .qfe { margin-top: 0; }
+  .stack { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin: 0.8rem 0 0; }
+  .read { margin: 0.7rem 0 0; font-size: 0.88rem; }
+  .where { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.45rem; }
+  .card h3 { font-size: 1.2rem; }
+  .what { font-size: 0.9rem; color: var(--muted); margin: 0.5rem 0 0; line-height: 1.55; }
+
+  .qfe { display: grid; grid-template-columns: 3.4rem 1fr; gap: 0.35rem 0.6rem; margin: 0.75rem 0 0; font-size: 0.88rem; line-height: 1.5; }
+  .qfe dt { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 0.2rem; }
+  .qfe dd { margin: 0; color: var(--muted); }
+  .qfe dd.q { color: var(--ink); font-family: var(--serif); font-style: italic; font-size: 0.98rem; }
+
+  .stat { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.15rem 0.5rem; padding-top: 0.9rem; margin: 0.9rem 0 0; border-top: 1px dashed var(--rule); font-size: 0.82rem; color: var(--muted); }
+  .stat strong { font-family: var(--mono); font-weight: 600; font-size: 0.85rem; color: var(--accent); }
+  .dotmark { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); align-self: center; }
+
+  .featured { display: grid; grid-template-columns: 1.35fr 1fr; margin-bottom: 1rem; }
+  .featured :global(.art) { height: 100%; aspect-ratio: auto; min-height: 15rem; }
+  .featured .body { padding: 1.6rem 1.75rem; display: flex; flex-direction: column; justify-content: center; }
+  .featured h3 { font-size: 1.8rem; }
+  .featured .qfe { font-size: 0.94rem; }
+  .featured .stat { margin-top: 1.1rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .grid.two { grid-template-columns: repeat(2, 1fr); }
+  .post { display: block; text-decoration: none; }
+  .post:hover h3 { color: var(--accent); }
+  .post :global(.signal) { margin-bottom: 1rem; }
+
+  /* Lineage */
+  .lin-wrap { display: grid; grid-template-columns: 1fr 17rem; gap: 1rem; align-items: start; }
+  .table { padding: 1.1rem 1.5rem 0.4rem; }
+  .lin-graph { display: block; width: 100%; height: auto; margin-bottom: 0.4rem; }
+  .lin-graph .e { fill: none; stroke: var(--line); stroke-width: 1.5; }
+  .lin-graph .eA { stroke: var(--accent); stroke-width: 2; }
+  .lin-graph .n { fill: var(--bg); stroke: var(--line); }
+  .lin-graph .nA { fill: var(--accent); stroke: var(--accent); }
+  .lin-graph .t { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 11.5px; fill: var(--ink); }
+  .lin-graph .tA { fill: var(--bg); font-weight: 600; }
+  .tr { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+  .tr:last-child { border-bottom: 0; }
+  .org { font-family: var(--serif); font-size: 1.1rem; }
+  .r { display: block; font-size: 0.92rem; }
+  .w { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }
+  .contact { background: #1c1b19; color: #ebe8e1; border-color: #1c1b19; padding: 1.5rem; }
+  .contact .sec-label { color: #a3a097; }
+  .say { font-family: var(--serif); font-size: 1.5rem; line-height: 1.25; margin: 1.1rem 0 0.6rem; }
+  .say a { text-decoration: none; }
+  .contact .small { font-size: 0.85rem; margin: 0; color: #c9c5bc; line-height: 1.7; }
+  .contact a { text-decoration-color: #77746c; }
+  @media (prefers-color-scheme: dark) { .contact { background: var(--surface); border-color: var(--rule); } }
+  .contact a:hover { color: var(--accent); }
+
+  .colophon { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin: 3rem 0 0; }
+
+  @media (max-width: 820px) {
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .featured { grid-template-columns: 1fr; }
+    .featured :global(.art) { aspect-ratio: 2 / 1; min-height: 0; }
+    .lin-wrap { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .intro { grid-template-columns: 1fr; padding: 1.5rem; }
+    .intro-photo { order: -1; width: 6rem; height: 6rem; border-radius: 50%; }
+    .grid, .grid.two { grid-template-columns: 1fr; }
+    .cps .card :global(.art) { display: none; }
+    .lin-graph { display: none; }
+    .tr { grid-template-columns: 1fr; gap: 0.2rem; }
+    .sec-label { display: none; }
+    .contact .sec-label { display: block; }
+    .lin-graph .t { font-size: 13px; }
+  }
+</style>

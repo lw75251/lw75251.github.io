@@ -1,0 +1,98 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '../styles/global.css';
+import { SITE, RESUME_MAILTO, hasPublishedWriting, hasForecasts } from '../site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article';
+  wide?: boolean;
+  quietFooter?: boolean;
+}
+const { title, description = SITE.description, noindex = false, type = 'website', wide = false, quietFooter = false } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.name}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.png', Astro.site);
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const showWriting = (await hasPublishedWriting()) || import.meta.env.DEV;
+const nav = [
+  ...(showWriting ? [{ href: '/writing', label: 'Writing' }] : []),
+  ...(hasForecasts() || import.meta.env.DEV ? [{ href: '/forecasts', label: 'Forecasts' }] : []),
+  { href: '/about', label: 'About' },
+  { href: '/now', label: 'Now' },
+];
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: Astro.site?.toString(),
+  image: new URL('/leon.jpg', Astro.site).toString(),
+  jobTitle: 'Founding Member of Technical Staff, Data (Staff)',
+  worksFor: { '@type': 'Organization', name: 'Replit', url: 'https://replit.com' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of California, San Diego' },
+  knowsAbout: ['Product analytics', 'Growth and monetization', 'Pricing experiments', 'Revenue metrics', 'Forecasting', 'Statistics', 'Data engineering', 'dbt', 'AI tools for analytics'],
+  sameAs: [SITE.linkedin, SITE.github],
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Leon Wu: staff data scientist for product, growth and revenue" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151513" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {showWriting && <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />}
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class:list={['site-header wrap', { wide }]}>
+      <a href="/" class="mark" aria-label="Leon Wu, home">
+        <svg class="mark-dot" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+          <circle cx="10" cy="10" r="8.5" class="ring" />
+          <circle cx="10" cy="10" r="4" class="dot" />
+        </svg>
+        <span>Leon Wu</span>
+      </a>
+      <nav aria-label="Main">
+        {nav.map((n) => (
+          <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
+        ))}
+      </nav>
+    </header>
+    <main id="main" class:list={['wrap', { wide }]}>
+      <slot />
+    </main>
+    <footer class:list={['site-footer wrap', { wide }]}>
+      <span>Leon Wu · New York</span>
+      {!quietFooter && <span class="links">
+        <a href={`mailto:${SITE.email}`}>Email</a>
+        <a href={SITE.linkedin}>LinkedIn</a>
+        <a href={SITE.github}>GitHub</a>
+        <a href={RESUME_MAILTO}>Resume</a>
+      </span>}
+    </footer>
+  </body>
+</html>

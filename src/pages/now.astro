@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import { hasPublishedWriting, hasForecasts } from '../site';
+
+// Edit this page whenever things change. Bump the date when you do.
+const updated = 'November 2026';
+const now = [
+  { label: 'Working on', text: 'Pricing and monetization questions at Replit, and making Oracle, our analytics agent, a trustworthy analyst: a semantic layer it can lean on, and evals that catch confident wrong answers.' },
+  ...((await hasPublishedWriting()) ? [{ label: 'Writing', text: 'Essays on measuring what users mean, pricing thresholds, and keeping revenue metrics boring.' }] : []),
+  ...(hasForecasts() ? [{ label: 'Forecasting', text: 'A public log of dated predictions about data and AI, scored in the open.' }] : []),
+  { label: 'Off the clock', text: 'Riftbound, chess puzzles, and more Lakers games than is reasonable.' },
+];
+---
+<Base title="Now" description="What Leon Wu is focused on right now.">
+  <h1>Now</h1>
+  <p class="muted sub">
+    What I'm focused on right now. Updated {updated}. (This is a <a href="https://nownownow.com/about">now page</a>.)
+  </p>
+  <ul class="work">
+    {now.map((n) => (
+      <li><span class="where">{n.label}</span><p>{n.text}</p></li>
+    ))}
+  </ul>
+</Base>
+
+<style>
+  .sub { margin: 1rem 0 2.5rem; }
+</style>
